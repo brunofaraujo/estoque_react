@@ -1,0 +1,10 @@
+.sidemenu {
+    height: 91.5dvh;
+    margin-top: 1.5rem;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    gap: 15px;
+    font-size: 1rem;
+    position: relative;
+}
