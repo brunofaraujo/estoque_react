@@ -1,4 +1,4 @@
-import { Button, Flex, Image, Layout, Space, Typography } from "antd";
+import { Button, Flex, Layout, Space } from "antd";
 import styles from "./Home.module.css";
 import FooterComponent from "../../components/Footer/FooterComponent";
 import sesi_logo from "../../assets/SESI-home.svg";

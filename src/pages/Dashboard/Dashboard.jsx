@@ -5,12 +5,11 @@ import MenuList from "../../components/MenuList";
 import { useState } from "react";
 import ToggleThemeBtn from "../../components/ToggleThemeBtn";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
-import { AuthProvider, useAuthValue } from "../../context/AuthContext";
 import { Content } from "antd/es/layout/layout";
 import { Outlet } from "react-router-dom";
 import FooterComponent from "../../components/Footer/FooterComponent";
 
-function Dashboard({fromRoute}) {
+function Dashboard() {
   const { Header, Sider } = Layout;
 
   const [darkTheme, setdarkTheme] = useState(true);
