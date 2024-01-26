@@ -3,27 +3,46 @@ import { Form, Input, Modal } from "antd";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 
 const LoginModal = ({ isOpen, setCloseModal }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  let errorMsg = "";
+
+  const { error: alert } = Modal;
+
+  const showAlert = () => {
+    alert({
+      title: errorMsg,
+      icon: <ExclamationCircleFilled />,
+      centered: true,
+      onOk: (errorMsg = ""),
+      destroyOnClose: true
+    });
+  };
 
   const navigate = useNavigate();
 
   const queryLogin = useMutation({
     mutationFn: async () => {
+      setConfirmLoading(true);
       return await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
         username: username,
         password: password,
       });
     },
     onSuccess: async (data) => {
-      localStorage.setItem("accessToken", data.data.accessToken);
-      navigate("/dashboard");
+      await localStorage.setItem("accessToken", data.data.accessToken);
+      await onFinish();
+      setConfirmLoading(false);
     },
-    onError: (err) => {
-      console.log(err);
+    onError: async (err) => {
+      console.log(err); // Remove it afterwards!
+      errorMsg = "Falha na autenticação";
+      setConfirmLoading(false);
+      showAlert();
     },
   });
 
@@ -31,25 +50,13 @@ const LoginModal = ({ isOpen, setCloseModal }) => {
     queryLogin.mutate();
   };
 
-  // const handleOk = () => {
-  //   setModalText("The modal will be closed after two seconds");
-  //   setConfirmLoading(true);
-  //   setTimeout(() => {
-  //     setCloseModal();
-  //     setConfirmLoading(false);
-  //   }, 2000);
-  // };
-
-  const onFinish = (values) => {
-    console.log("Success:", values);
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+  const onFinish = () => {
+    navigate("/dashboard");
   };
 
   const handleCancel = () => {
-    console.log("Clicked cancel button");
+    setPassword("");
+    setUsername("");
     setCloseModal();
   };
 
@@ -63,6 +70,9 @@ const LoginModal = ({ isOpen, setCloseModal }) => {
       onCancel={handleCancel}
       okText="Enviar"
       cancelText="Cancelar"
+      okButtonProps={{
+        disabled: !username || !password ? true : false,
+      }}
       centered
     >
       <Form
@@ -79,9 +89,7 @@ const LoginModal = ({ isOpen, setCloseModal }) => {
         initialValues={{
           remember: true,
         }}
-        onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
-        autoComplete="off"
+        autoComplete="on"
       >
         <Form.Item
           label="Chapa"
