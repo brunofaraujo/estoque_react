@@ -6,14 +6,16 @@ import { useState } from "react";
 import ToggleThemeBtn from "../../components/ToggleThemeBtn";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
-import { Outlet } from "react-router-dom";
 import FooterComponent from "../../components/Footer/FooterComponent";
+import { Outlet, useNavigate } from "react-router-dom";
+import { useAuth } from "../../hooks/useAuth";
 
 function Dashboard() {
   const { Header, Sider } = Layout;
-
   const [darkTheme, setdarkTheme] = useState(true);
   const [collapsed, setCollapsed] = useState(false);
+  const {isAuthenticated} = useAuth()
+  const navigate = useNavigate()
 
   const toggleTheme = () => {
     setdarkTheme(!darkTheme);
@@ -23,14 +25,10 @@ function Dashboard() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  // const { user } = useAuthValue();
-  const user = {
-    name: "Bruno Araujo",
-    email: "bruno@fakemail.com",
-  };
-
+  if (!isAuthenticated) {
+    navigate("/")
+  }
   return (
-    <AuthProvider value={user}>
       <Layout>
         <Sider
           collapsible
@@ -60,7 +58,6 @@ function Dashboard() {
           <FooterComponent/>
         </Layout>
       </Layout>
-    </AuthProvider>
   );
 }
 export default Dashboard;

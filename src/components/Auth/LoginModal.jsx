@@ -1,57 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Form, Input, Modal } from "antd";
-import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ExclamationCircleFilled } from "@ant-design/icons";
+import { useAuth } from "../../hooks/useAuth";
 
 const LoginModal = ({ isOpen, setCloseModal }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { fetchLogin } = useAuth();
+  const navigate = useNavigate();
   let errorMsg = "";
-
   const { error: alert } = Modal;
-
   const showAlert = () => {
     alert({
       title: errorMsg,
       icon: <ExclamationCircleFilled />,
       centered: true,
       onOk: (errorMsg = ""),
-      destroyOnClose: true
+      destroyOnClose: true,
     });
   };
 
-  const navigate = useNavigate();
-
-  const queryLogin = useMutation({
-    mutationFn: async () => {
-      setConfirmLoading(true);
-      return await axios.post(`${import.meta.env.VITE_API_URL}/auth/login`, {
-        username: username,
-        password: password,
-      });
-    },
-    onSuccess: async (data) => {
-      await localStorage.setItem("accessToken", data.data.accessToken);
-      await onFinish();
-      setConfirmLoading(false);
-    },
-    onError: async (err) => {
-      console.log(err); // Remove it afterwards!
+  const handleLoginPost = async () => {
+    setConfirmLoading(true)
+    if (await fetchLogin(username, password)) {
+      setConfirmLoading(false)
+      navigate("/dashboard");
+    } else {
+      setConfirmLoading(false)
       errorMsg = "Falha na autenticação";
-      setConfirmLoading(false);
       showAlert();
-    },
-  });
-
-  const handleLoginPost = () => {
-    queryLogin.mutate();
-  };
-
-  const onFinish = () => {
-    navigate("/dashboard");
+    }
   };
 
   const handleCancel = () => {

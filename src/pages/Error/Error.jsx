@@ -1,16 +1,17 @@
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import styles from "./Error.module.css";
 import { Button } from "antd";
 
 const ErrorPage = () => {
-  return (
-    <div className={styles.error_container}>
-      <h2>Opa! Página não encontrada</h2>
-      <Button type="dashed" size="large">
-        <Link to={"/"}>Retornar ao site</Link>
-      </Button>
-    </div>
-  );
+  return <Navigate to="/" />
+  // return (
+  //   <div className={styles.error_container}>
+  //     <h2>Opa! Página não encontrada</h2>
+  //     <Button type="dashed" size="large">
+  //       <Link to={"/"}>Retornar ao site</Link>
+  //     </Button>
+  //   </div>
+  // );
 };
 
 export default ErrorPage;

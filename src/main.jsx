@@ -15,12 +15,21 @@ import Logout from "./pages/Auth/AutLogout.jsx";
 import DashboardHome from "./pages/Dashboard/DashboardHome.jsx";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import axios from "axios";
+import { UserProvider } from "./context/UserContext.jsx";
 
 const queryClient = new QueryClient();
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
 )}`;
+
+axios.interceptors.request.use(function (config) {
+  const token = localStorage.getItem("accessToken");
+  config.headers.Authorization = token ? `Bearer ${token}` : "";
+  return config;
+});
+
+
 
 const router = createBrowserRouter([
   {
@@ -36,7 +45,8 @@ const router = createBrowserRouter([
   },
   {
     path: "/dashboard",
-    element: <Dashboard />,
+    element: <Dashboard  />,
+
     children: [
       {
         path: "/dashboard",
@@ -74,8 +84,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <UserProvider>
       <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
       </QueryClientProvider>
+    </UserProvider>
   </React.StrictMode>
 );

@@ -2,22 +2,27 @@ import { Button, Flex, Layout, Space } from "antd";
 import styles from "./Home.module.css";
 import FooterComponent from "../../components/Footer/FooterComponent";
 import sesi_logo from "../../assets/SESI-home.svg";
-import { SendOutlined } from '@ant-design/icons';
+import { SendOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import LoginModal from "../../components/Auth/LoginModal";
+import { useAuth } from "../../hooks/useAuth";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
   const { Header, Content } = Layout;
   const [openModal, setOpenModal] = useState(false);
+  const { isAuthenticated } = useAuth();
+  const navigate = useNavigate();
+  const setCloseModal = () => {
+    setOpenModal(false);
+  };
 
   const handleOpenModal = () => {
-    setOpenModal(true)
-  }
-
-  const setCloseModal = () => {
-    setOpenModal(false)
-  }
-
+    if (isAuthenticated) {
+      navigate("/dashboard")
+    }
+    setOpenModal(true);
+  };
   return (
     <Flex gap="middle" wrap="wrap" className={styles.home_container}>
       <Layout className={styles.layout_style}>
@@ -29,9 +34,15 @@ const Home = () => {
           <h2>Sistema de Controle Estoque</h2>
           <h3>Escola SESI Prata</h3>
           <Space className={styles.access_container}>
-          <Button type="primary" icon={<SendOutlined />} size={"large"} className={styles.access_btn} onClick={handleOpenModal}>
-            Entrar
-          </Button>
+            <Button
+              type="primary"
+              icon={<SendOutlined />}
+              size={"large"}
+              className={styles.access_btn}
+              onClick={handleOpenModal}
+            >
+              Entrar
+            </Button>
           </Space>
         </Content>
         <LoginModal isOpen={openModal} setCloseModal={setCloseModal} />
