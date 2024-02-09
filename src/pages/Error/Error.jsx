@@ -3,7 +3,7 @@ import styles from "./Error.module.css";
 import { Button } from "antd";
 
 const ErrorPage = () => {
-  return <Navigate to="/" />
+  return <Navigate to="/dashboard" />
   // return (
   //   <div className={styles.error_container}>
   //     <h2>Opa! Página não encontrada</h2>

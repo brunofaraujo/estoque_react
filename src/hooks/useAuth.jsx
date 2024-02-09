@@ -6,10 +6,11 @@ export const useAuth = () => {
   const { updateUser } = useContext(UserContext);
   const [cancelled, setCancelled] = useState(false);
   const [isAuthenticated, setisAuthenticated] = useState(false);
+  const token = localStorage.getItem("accessToken");
 
   useEffect(() => {
     fetchUser();
-  },[isAuthenticated]);
+  }, [isAuthenticated, token]);
 
   const fetchUser = async () => {
     return await axios
@@ -21,7 +22,6 @@ export const useAuth = () => {
       })
       .catch((err) => {
         setisAuthenticated(false);
-        console.log(err);
         return false;
       })
       .finally(() => setCancelled(true));
@@ -38,7 +38,6 @@ export const useAuth = () => {
         return fetchUser;
       })
       .catch((err) => {
-        console.log(err);
         return false;
       })
       .finally(() => setCancelled(true));
