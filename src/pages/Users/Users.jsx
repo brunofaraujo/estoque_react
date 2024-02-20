@@ -2,9 +2,10 @@ import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
 import styles from "./Users.module.css";
-import { Avatar, List, Spin } from "antd";
+import { Avatar, Card, Divider, List } from "antd";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { NavLink } from "react-router-dom";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 
 const Users = () => {
   const [users, setUsers] = useState(undefined);
@@ -33,15 +34,20 @@ const Users = () => {
 
   const showUsers = () => {
     return (
+      <Card direction={"vertical"} className={styles.users_container}>
+        <Divider orientation="left">Usuários registrados</Divider>
+        <br/>
       <List
         itemLayout={"horizontal"}
         size={"small"}
-        style={{display: "flex"}}
+        style={{ display: "flex" }}
         bordered
-
         dataSource={users}
         renderItem={(user) => (
-          <List.Item style={{width: 450, padding: 20, margin: 5}} actions={[<NavLink to={`update/${btoa(user.id)}`}>Editar</NavLink>]}>
+          <List.Item
+            style={{ width: 450, padding: 20, margin: 5 }}
+            actions={[<NavLink to={`update/${btoa(user.id)}`}>Editar</NavLink>]}
+          >
             <List.Item.Meta
               avatar={
                 <Avatar
@@ -54,6 +60,7 @@ const Users = () => {
           </List.Item>
         )}
       />
+      </Card>
     );
   };
 
@@ -67,13 +74,9 @@ const Users = () => {
 
   return (
     <div className={styles.users_container}>
-      {loading && (
-        <Spin tip={"Carregando..."} size="large">
-          <div className={styles.spin_content}></div>
-        </Spin>
-      )}
+      {loading && <LoadingSpinner />}
       {error && <ErrorComponent />}
-      {users && showUsers() }
+      {users && showUsers()}
     </div>
   );
 };

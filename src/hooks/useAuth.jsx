@@ -1,12 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { UserContext } from "../context/UserContext";
+import { useNavigate } from "react-router-dom";
 
 export const useAuth = () => {
   const { updateUser } = useContext(UserContext);
   const [cancelled, setCancelled] = useState(false);
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const token = localStorage.getItem("accessToken");
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchUser();
@@ -22,7 +24,7 @@ export const useAuth = () => {
       })
       .catch((err) => {
         setisAuthenticated(false);
-        return false;
+        navigate("/");
       })
       .finally(() => setCancelled(true));
   };

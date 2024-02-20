@@ -1,4 +1,4 @@
-import { Button, Flex, Layout, theme } from "antd";
+import { Button, Layout, theme } from "antd";
 import styles from "./Dashboard.module.css";
 import Logo from "../../components/Logo/Logo";
 import MenuList from "../../components/Menu/MenuList";
