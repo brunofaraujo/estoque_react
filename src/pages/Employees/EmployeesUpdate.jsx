@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { FileProtectOutlined, DeleteOutlined } from "@ant-design/icons";
 import {
   Button,
   Card,
@@ -14,7 +15,6 @@ import {
   Space,
   message,
 } from "antd";
-import { FileProtectOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const EmployeesUdate = () => {
   const [error, setError] = useState(false);
