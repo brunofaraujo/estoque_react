@@ -71,7 +71,7 @@ const Employees = () => {
         setLoading(false);
         setError(true);
       });
-  });
+  },[]);
 
   return (
     <>

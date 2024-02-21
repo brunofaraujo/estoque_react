@@ -25,7 +25,7 @@ const Brands = () => {
           setError(true);
         })
         .finally(() => setLoading(false));
-    });
+    },[]);
   
     const handleEdit = (b) => {
       navigate(`update/${b}`);

@@ -25,7 +25,7 @@ const Categories = () => {
         setError(true);
       })
       .finally(() => setLoading(false));
-  });
+  },[]);
 
   const handleEdit = (c) => {
     navigate(`update/${c}`);
