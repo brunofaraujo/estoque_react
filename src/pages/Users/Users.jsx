@@ -46,7 +46,7 @@ const Users = () => {
         renderItem={(user) => (
           <List.Item
             style={{ width: 450, padding: 20, margin: 5 }}
-            actions={[<NavLink to={`update/${btoa(user.id)}`}>Editar</NavLink>]}
+            actions={[<NavLink to={`update/${user.id}`}>Editar</NavLink>]}
           >
             <List.Item.Meta
               avatar={

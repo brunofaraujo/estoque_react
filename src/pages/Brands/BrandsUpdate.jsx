@@ -92,7 +92,7 @@ const BrandsUpdate = () => {
             "Erro! Marcas com items associados não podem ser removidas"
           );
         } else {
-          message.error("Falha ao atualizar a marca");
+          message.error("Falha ao excluir a marca");
         }
         setSubmitting(false);
         setConfirmLoading(false);

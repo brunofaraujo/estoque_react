@@ -209,7 +209,6 @@ const Items = () => {
       title: "Item",
       dataIndex: "title",
       key: "title",
-      fixed: "left",
       width: "25%",
       ...getColumnSearchProps("title"),
       sorter: (a, b) => a.title.localeCompare(b.title),
@@ -264,7 +263,7 @@ const Items = () => {
         >
           <Radio.Button
             disabled={disabled}
-            onClick={() => navigate(`../moves/update/${id}`)}
+            onClick={() => navigate(`../moves/create/${id}`)}
             style={{ color: "#1d39c4", fontWeight: 500 }}
           >
             Movimentar

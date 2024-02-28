@@ -186,12 +186,22 @@ const ItemsCreate = () => {
                   labelAlign="left"
                   label={"Nome"}
                   name={"title"}
-                  rules={[{ required: true, message: "Digite o nome do item" }]}
+                  rules={[
+                    { required: true, message: "Digite o nome do item" },
+                    { type: "string" },
+                    { whitespace: true, message: "Nome inválido" },
+                    { max: 100, message: "Limite de texto excedido" },
+                    { transform: (value) => value.trim() },
+                  ]}
                   style={{ paddingRight: "40px" }}
                 >
                   <Input
                     placeholder="Nome do item"
                     style={{ width: "750px" }}
+                    count={{
+                      show: true,
+                      max: 100,
+                    }}
                   />
                 </Form.Item>
                 <Form.Item
@@ -237,11 +247,20 @@ const ItemsCreate = () => {
                   label="Descrição"
                   name={"description"}
                   labelAlign="left"
+                  rules={[
+                    { type: "string" },
+                    { max: 255, message: "Limite de texto excedido" },
+                    {whitespace: true, message: "Remova os espaços em branco"},
+                  ]}
                 >
                   <TextArea
                     rows={4}
-                    maxLength={250}
+                    maxLength={255}
                     style={{ width: "720px" }}
+                    count={{
+                      show: true,
+                      max: 255,
+                    }}
                   />
                 </Form.Item>
               </Space>

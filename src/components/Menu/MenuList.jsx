@@ -13,7 +13,6 @@ import {
   ProfileOutlined,
   AppstoreAddOutlined,
   LoginOutlined,
-  LogoutOutlined,
   DiffOutlined
 } from "@ant-design/icons";
 
@@ -120,11 +119,8 @@ const MenuList = ({ darkTheme }) => {
         title="Movimentações"
         icon={<BranchesOutlined />}
       >
-        <Menu.Item key="move-in" icon={<LoginOutlined />}>
-          <NavLink to={"moves/create"}>Nova entrada</NavLink>
-        </Menu.Item>
-        <Menu.Item key="move-out" icon={<LogoutOutlined />}>
-        <NavLink to={"moves/create"}>Nova saída</NavLink>
+        <Menu.Item key="move-new" icon={<LoginOutlined />}>
+          <NavLink to={"moves/create"}>Nova movimentação</NavLink>
         </Menu.Item>
         <Menu.Item key="moves-report" icon={<DiffOutlined />}>
         <NavLink to={"moves"}>Relatórios</NavLink>

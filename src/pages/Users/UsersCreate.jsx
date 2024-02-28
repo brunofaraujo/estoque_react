@@ -11,6 +11,7 @@ const UsersCreate = () => {
   const navigate = useNavigate();
   const [error, setError] = useState(false);
   const { isAuthenticated } = useAuth();
+  const [loading, setLoading] = useState(false);
 
   const handleSubmit = async () => {
     try {
@@ -27,7 +28,7 @@ const UsersCreate = () => {
         .then((response) => {
           message.success("Usuário criado com sucesso");
           setTimeout(() => {
-            navigate();
+            navigate("../users");
           }, 1500);
         })
         .catch((err) => {
@@ -53,7 +54,7 @@ const UsersCreate = () => {
           }
         });
     } catch (err) {
-      console.log(err);
+      console.log(err.errorFields);
     }
   };
 

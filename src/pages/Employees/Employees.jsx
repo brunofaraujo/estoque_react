@@ -64,7 +64,9 @@ const Employees = () => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/employees`)
       .then((response) => {
-        setEmployees(response.data);
+        const employeesObj = []
+        response.data.map((emp) => employeesObj.push({...emp, key: emp.id}))
+        setEmployees(employeesObj);
         setLoading(false);
       })
       .catch((error) => {

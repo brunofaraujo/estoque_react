@@ -1,10 +1,22 @@
 import { useNavigate, useParams } from "react-router-dom";
 import ErrorComponent from "../../components/Error/ErrorComponent";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Card, Space, Spin, Form, Input, Button, Switch, message } from "antd";
-import {FileProtectOutlined} from "@ant-design/icons";
-import styles from "./Users.module.css";
+import {
+  Card,
+  Space,
+  Form,
+  Input,
+  Button,
+  Switch,
+  message,
+  Divider,
+  Popconfirm,
+} from "antd";
+import { FileProtectOutlined } from "@ant-design/icons";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import { DeleteOutlined } from "@ant-design/icons";
+import { UserContext } from "../../context/UserContext";
 
 const UsersUpdate = () => {
   const { id } = useParams();
@@ -14,12 +26,16 @@ const UsersUpdate = () => {
   const [error, setError] = useState(false);
   const [done, setDone] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
+  const [openConfirmWindow, setOpenConfirmWindow] = useState(false);
+  const [confirmLoading, setConfirmLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
+  const { user: authUser } = useContext(UserContext);
 
   const getUser = (id) => {
     if (done) return;
     axios
-      .get(`${import.meta.env.VITE_API_URL}/users/${atob(id)}`)
+      .get(`${import.meta.env.VITE_API_URL}/users/${id}`)
       .then((response) => {
         setUser(response.data);
         form.setFieldsValue({
@@ -28,7 +44,6 @@ const UsersUpdate = () => {
           email: response.data.email,
         });
       })
-      .catch((err) => setError(true))
       .finally(() => {
         setLoading(false);
         setDone(true);
@@ -57,7 +72,7 @@ const UsersUpdate = () => {
         }
       });
       axios
-        .patch(`${import.meta.env.VITE_API_URL}/users/${atob(id)}`, userObject)
+        .patch(`${import.meta.env.VITE_API_URL}/users/${id}`, userObject)
         .then((response) => {
           message.success("Informações atualizadas");
           setTimeout(() => {
@@ -67,21 +82,56 @@ const UsersUpdate = () => {
         .catch((err) => {
           if (err.response.data.code === "P2002") {
             if (err.response.data.meta.target[0] === "username") {
-                message.error("Já existe um usuário com o número da chapa informada");
+              message.error(
+                "Já existe um usuário com o número da chapa informada"
+              );
             }
             if (err.response.data.meta.target[0] === "email") {
-                message.error("Já existe um usuário com o e-mail informado");
+              message.error("Já existe um usuário com o e-mail informado");
             }
-        }
-        if (err.response.data.message && err.response.data.message[0].includes("username must be shorter")) {
+          }
+          if (
+            err.response.data.message &&
+            err.response.data.message[0].includes("username must be shorter")
+          ) {
             message.error("O número da chapa deve conter 5 dígitos");
-        } else {
-            message.error("Erro! Verifique as informações digitadas e tente novamente");
-        }
+          } else {
+            message.error(
+              "Erro! Verifique as informações digitadas e tente novamente"
+            );
+          }
         });
     } catch (err) {
       console.log("Error: ", err);
     }
+  };
+
+  const handleDelete = () => {
+    setConfirmLoading(true);
+    setSubmitting(true);
+    axios
+      .delete(`${import.meta.env.VITE_API_URL}/users/${id}`)
+      .then((response) => {
+        message.success("Usuário excluído com sucesso");
+        setTimeout(() => {
+          navigate("../users");
+        }, 2000);
+      })
+      .catch((error) => {
+        message.error("Erro! Falha ao excluir o usuário");
+        setSubmitting(false);
+        setConfirmLoading(false);
+      });
+  };
+
+  const handleCancel = () => {
+    setSubmitting(false);
+    setOpenConfirmWindow(false);
+  };
+
+  const showConfirmation = () => {
+    setSubmitting(true);
+    setOpenConfirmWindow(true);
   };
 
   useEffect(() => {
@@ -90,13 +140,11 @@ const UsersUpdate = () => {
 
   const showUserForm = () => {
     return (
-      <Space direction={"vertical"} size={"large"} style={{ minWidth: "30%" }}>
-        <Card
-          title="Editando informações do usuário"
-          size={"large"}
-          direction={"vertical"}
-        >
-          <Form name={"updated_user"} form={form}>
+      <Card style={{ width: "25dvw" }}>
+        <Divider orientation="left">Editando informações do usuário</Divider>
+        <br />
+        <Space direction="vertical">
+          <Form name={"updated_user"} form={form} disabled={submitting}>
             <Form.Item
               label={"Número da chapa"}
               name={"username"}
@@ -172,7 +220,6 @@ const UsersUpdate = () => {
                 </Form.Item>
               </>
             )}
-
             <Form.Item>
               <Button
                 type={"primary"}
@@ -184,21 +231,50 @@ const UsersUpdate = () => {
               </Button>
             </Form.Item>
           </Form>
-        </Card>
-      </Space>
+        </Space>
+        {parseInt(authUser.userId) !== user.id && (
+          <Divider orientation="right" style={{ marginTop: "60px" }}>
+            <Popconfirm
+              title="Atenção!"
+              description={
+                <>
+                  <p>Essa operaçao não poderá ser desfeita.</p>
+                  <p>Deseja continuar?</p>
+                </>
+              }
+              open={openConfirmWindow}
+              onConfirm={handleDelete}
+              onCancel={handleCancel}
+              okText="Confirmar"
+              cancelText="Cancelar"
+              okButtonProps={{
+                loading: confirmLoading,
+              }}
+              showCancel={!confirmLoading}
+            >
+              <Button
+                onClick={showConfirmation}
+                type="primary"
+                danger
+                size="small"
+                ghost
+                icon={<DeleteOutlined />}
+              >
+                Excluir usuário
+              </Button>
+            </Popconfirm>
+          </Divider>
+        )}
+      </Card>
     );
   };
 
   return (
-    <div>
-      {loading && (
-        <Spin tip={"Carregando..."} size="large">
-          <div className={styles.spin_content}></div>
-        </Spin>
-      )}
+    <>
       {error && <ErrorComponent />}
-      {user && showUserForm()}
-    </div>
+      {loading && <LoadingSpinner />}
+      {user && !error && showUserForm()}
+    </>
   );
 };
 

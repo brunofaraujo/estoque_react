@@ -14,7 +14,6 @@ import App from "./App.jsx";
 import Auth from "./pages/Auth/Auth.jsx";
 import Logout from "./pages/Auth/AutLogout.jsx";
 import DashboardHome from "./pages/Dashboard/DashboardHome.jsx";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { UserProvider } from "./context/UserContext.jsx";
 import Users from "./pages/Users/Users.jsx";
@@ -34,9 +33,6 @@ import CategoriesCreate from "./pages/Categories/CategoriesCreate.jsx";
 import CategoriesUpdate from "./pages/Categories/CategoriesUpdate.jsx";
 import Moves from "./pages/Moves/Moves.jsx";
 import MovesCreate from "./pages/Moves/MovesCreate.jsx";
-import MovesUpdate from "./pages/Moves/MovesUpdate.jsx";
-
-const queryClient = new QueryClient();
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
@@ -151,8 +147,8 @@ const router = createBrowserRouter([
         element: <MovesCreate />,
       },
       {
-        path: "moves/update/:id",
-        element: <MovesUpdate />,
+        path: "moves/create/:id",
+        element: <MovesCreate />,
       },
     ],
   },
@@ -179,9 +175,7 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
-      <QueryClientProvider client={queryClient}>
         <RouterProvider router={router} />
-      </QueryClientProvider>
     </UserProvider>
   </React.StrictMode>
 );
