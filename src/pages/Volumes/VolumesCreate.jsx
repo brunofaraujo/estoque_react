@@ -5,6 +5,7 @@ import { FileProtectOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Button, Card, Divider, Form, Space, Input, Tag, message } from "antd";
 import { useNavigate } from "react-router-dom";
+import useTrim from "../../hooks/useTrim";
 
 const VolumesCreate = () => {
   const [error, setError] = useState(false);
@@ -67,6 +68,7 @@ const VolumesCreate = () => {
                 label={"Nome"}
                 name={"name"}
                 rules={[{ required: true, message: "Digite o nome do volume" }]}
+                normalize={(text) => useTrim(text)}
                 required
               >
                 <Input style={{ width: "15dvw" }} />

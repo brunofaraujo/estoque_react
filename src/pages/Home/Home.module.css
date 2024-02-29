@@ -12,6 +12,7 @@
     align-items: center;
     justify-content: flex-start;
     flex-direction: column;
+    height: 40dvh;
 }
 
 .content_style h1 {
@@ -21,7 +22,8 @@
     padding: 30px;
     background-size: cover;
     border-radius: 50%;
-    color: var(--bg-color-primary);
+    color: whitesmoke;
+    z-index: 10;
 }
 
 .content_style h2 {
@@ -49,7 +51,7 @@
     margin-top: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.1;
+    opacity: 0.11;
     background-image: url('../../assets/unidade-prata-escola-sesi.jpg');
     background-repeat: no-repeat;
     background-position: center;

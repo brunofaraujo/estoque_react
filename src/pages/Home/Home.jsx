@@ -27,11 +27,11 @@ const Home = () => {
     <Flex gap="middle" wrap="wrap" className={styles.home_container}>
       <Layout className={styles.layout_style}>
         <Header className={styles.header_style}>
-          <img src={sesi_logo} width={160} />
+          <img src={sesi_logo} width={200} />
         </Header>
         <Content className={styles.content_style}>
           <h1>SCE</h1>
-          <h2>Sistema de Controle Estoque</h2>
+          <h2>Sistema Controlador de Estoque</h2>
           <h3>Escola SESI Prata</h3>
           <Space className={styles.access_container}>
             <Button

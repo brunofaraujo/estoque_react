@@ -1,11 +1,11 @@
 import styles from "./Logo.module.css";
-import { ReconciliationOutlined } from "@ant-design/icons";
+import EscolaSesiLogo from "../../assets/escola_sesi_logo_sm.png"
 const Logo = () => {
   return (
     <div className={styles.logo}>
       <div className={styles.logo_icon}>
-        <ReconciliationOutlined />
-      </div>
+        <img src={EscolaSesiLogo} alt="Escola SESI" />
+        </div>
     </div>
   );
 };

@@ -16,6 +16,7 @@ import {
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
+import useTrim from "../../hooks/useTrim";
 
 const VolumesUpdate = () => {
   const [error, setError] = useState(false);
@@ -126,6 +127,7 @@ const VolumesUpdate = () => {
                 label={"Nome"}
                 name={"name"}
                 rules={[{ required: true, message: "Digite o nome do volume" }]}
+                normalize={(text) => useTrim(text)}
                 required
               >
                 <Input style={{ width: "15dvw" }} />

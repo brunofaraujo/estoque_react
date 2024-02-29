@@ -16,6 +16,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { FileProtectOutlined } from "@ant-design/icons";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import useTrim from "../../hooks/useTrim";
 
 const ItemsUpdate = () => {
   const { id } = useParams();
@@ -206,6 +207,7 @@ const ItemsUpdate = () => {
                   labelAlign="left"
                   label={"Nome"}
                   name={"title"}
+                  normalize={(text) => useTrim(text)}
                   rules={[
                     { required: true, message: "Digite o nome do item" },
                     { type: "string" },
@@ -232,8 +234,6 @@ const ItemsUpdate = () => {
                   <Select
                     showSearch
                     optionFilterProp="children"
-                    // onSearch={handleBrandSearch}
-                    // onChange={handleBrandChange}
                     filterOption={filterOption}
                     style={{
                       width: "250px",
@@ -265,6 +265,7 @@ const ItemsUpdate = () => {
                 <Form.Item
                   label="Descrição"
                   name={"description"}
+                  normalize={(text) => useTrim(text)}
                   labelAlign="left"
                   rules={[
                     { type: "string" },
@@ -274,7 +275,6 @@ const ItemsUpdate = () => {
                       message: "Remova os espaços em branco",
                     },
                   ]}
-                  normalize={(value) => value.trim()}
                 >
                   <TextArea
                     rows={4}
@@ -292,6 +292,7 @@ const ItemsUpdate = () => {
                   labelAlign="left"
                   label={"Patrimônio"}
                   name={"register"}
+                  normalize={(text) => useTrim(text)}
                   style={{ paddingRight: "40px" }}
                 >
                   <Input style={{ width: "150px" }} />
@@ -312,6 +313,7 @@ const ItemsUpdate = () => {
                 <Form.Item
                   labelAlign="left"
                   label={"N° Série"}
+                  normalize={(text) => useTrim(text)}
                   name={"serial"}
                   style={{ paddingRight: "40px" }}
                 >
@@ -322,6 +324,7 @@ const ItemsUpdate = () => {
                   labelAlign="left"
                   label={"Lote"}
                   name={"batch"}
+                  normalize={(text) => useTrim(text)}
                   style={{ paddingRight: "40px" }}
                 >
                   <Input style={{ width: "150px" }} />

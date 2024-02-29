@@ -148,6 +148,7 @@ const UsersUpdate = () => {
             <Form.Item
               label={"Número da chapa"}
               name={"username"}
+              normalize={(text) => useTrim(text)}
               rules={[{ required: true, message: "Digite o número da chapa" }]}
               required
             >
@@ -156,6 +157,7 @@ const UsersUpdate = () => {
             <Form.Item
               label={"Nome"}
               name={"name"}
+              normalize={(text) => useTrim(text)}
               rules={[{ required: true, message: "Digite o nome" }]}
               required
             >
@@ -190,6 +192,10 @@ const UsersUpdate = () => {
                       min: 6,
                       message: "A senha deve ter pelo menos 6 caracteres",
                     },
+                    {
+                      whitespace: true,
+                      message: "Caractere inválido digitado",
+                    },
                   ]}
                 >
                   <Input.Password />
@@ -203,6 +209,10 @@ const UsersUpdate = () => {
                     {
                       required: true,
                       message: "Repita a senha digitada",
+                    },
+                    {
+                      whitespace: true,
+                      message: "Caractere inválido digitado",
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {

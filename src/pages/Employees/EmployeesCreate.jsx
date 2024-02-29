@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import {
@@ -13,15 +13,17 @@ import {
 } from "antd";
 import { FileProtectOutlined } from "@ant-design/icons";
 import axios from "axios";
-import { useAuth } from "../../hooks/useAuth";
+import { UserContext } from "../../context/UserContext";
+import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
+import useTrim from "../../hooks/useTrim";
 
 const EmployeesCreate = () => {
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form] = Form.useForm();
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
 
   const handleEmployeeSubmit = (employeeData) => {
     if (submitting) return;
@@ -74,31 +76,18 @@ const EmployeesCreate = () => {
       value: "DR",
       label: "DR",
     },
-    {
-      value: "DN",
-      label: "DN",
-    },
-    {
-      value: "Financeiro",
-      label: "Financeiro",
-    },
-    {
-      value: "Professor",
-      label: "Professor",
-    },
-    {
-      value: "Secretaria",
-      label: "Secretaria",
-    },
   ];
 
-  const checkAuth = async (isAuthenticated) => {
-    (await isAuthenticated) ? true : false;
-  };
+
+  useEffect(() => {
+    user && setLoading(false)
+  },[])
 
   return (
     <>
-      {checkAuth(isAuthenticated) ? (
+      {error && <ErrorComponent />}
+      {loading && <LoadingSpinner />}
+      {user && !error && (
         <Card style={{ width: "50dvw" }}>
           <Divider orientation="left">Cadastrar novo colaborador</Divider>
           <br />
@@ -116,6 +105,7 @@ const EmployeesCreate = () => {
                   labelAlign="left"
                   label={"Nome"}
                   name={"name"}
+                  normalize={(text) => useTrim(text)}
                   rules={[{ required: true, message: "Digite um nome" }]}
                   style={{ paddingRight: "40px" }}
                 >
@@ -127,6 +117,7 @@ const EmployeesCreate = () => {
                   labelAlign="left"
                   label={"Chapa"}
                   name={"register"}
+                  normalize={(text) => useTrim(text)}
                   rules={[{ required: true, message: "Digite o número" }]}
                   style={{ paddingRight: "40px" }}
                 >
@@ -158,8 +149,6 @@ const EmployeesCreate = () => {
             </Form>
           </Space>
         </Card>
-      ) : (
-        <ErrorComponent />
       )}
     </>
   );

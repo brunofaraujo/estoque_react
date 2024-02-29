@@ -18,6 +18,7 @@ import ErrorComponent from "../../components/Error/ErrorComponent";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { FileProtectOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
+import useTrim from "../../hooks/useTrim";
 
 const ItemsCreate = () => {
   dayjs.extend(customParseFormat);
@@ -33,6 +34,7 @@ const ItemsCreate = () => {
   const [brands, setBrands] = useState(null);
   const [categories, setCategories] = useState(null);
   const [volumes, setVolumes] = useState(null);
+
 
   const handleBrandChange = (value) => {
     console.log(`Selected: ${value}`);
@@ -157,18 +159,17 @@ const ItemsCreate = () => {
     await getBrands();
     await getCategories();
     await getVolumes();
-    setLoading(false);
   };
 
   useEffect(() => {
-    fetchData();
+    fetchData() && setLoading(false);
   }, []);
 
   return (
     <>
       {error && <ErrorComponent />}
       {loading && <LoadingSpinner />}
-      {brands && categories && volumes && !error && (
+      {brands && categories && volumes && !error && !loading && (
         <Card bordered={true} style={{ width: "80dvw" }}>
           <Divider orientation="left">Cadastro de novo item</Divider>
           <br />
@@ -186,12 +187,12 @@ const ItemsCreate = () => {
                   labelAlign="left"
                   label={"Nome"}
                   name={"title"}
+                  normalize={(text) => useTrim(text)}
                   rules={[
                     { required: true, message: "Digite o nome do item" },
                     { type: "string" },
                     { whitespace: true, message: "Nome inválido" },
                     { max: 100, message: "Limite de texto excedido" },
-                    { transform: (value) => value.trim() },
                   ]}
                   style={{ paddingRight: "40px" }}
                 >
@@ -247,10 +248,14 @@ const ItemsCreate = () => {
                   label="Descrição"
                   name={"description"}
                   labelAlign="left"
+                  normalize={(text) => useTrim(text)}
                   rules={[
                     { type: "string" },
                     { max: 255, message: "Limite de texto excedido" },
-                    {whitespace: true, message: "Remova os espaços em branco"},
+                    {
+                      whitespace: true,
+                      message: "Remova os espaços em branco",
+                    },
                   ]}
                 >
                   <TextArea
@@ -269,6 +274,7 @@ const ItemsCreate = () => {
                   labelAlign="left"
                   label={"Patrimônio"}
                   name={"register"}
+                  normalize={(text) => useTrim(text)}
                   style={{ paddingRight: "40px" }}
                 >
                   <Input style={{ width: "150px" }} />
@@ -289,6 +295,7 @@ const ItemsCreate = () => {
                 <Form.Item
                   labelAlign="left"
                   label={"N° Série"}
+                  normalize={(text) => useTrim(text)}
                   name={"serial"}
                   style={{ paddingRight: "40px" }}
                 >
@@ -299,6 +306,7 @@ const ItemsCreate = () => {
                   labelAlign="left"
                   label={"Lote"}
                   name={"batch"}
+                  normalize={(text) => useTrim(text)}
                   style={{ paddingRight: "40px" }}
                 >
                   <Input style={{ width: "150px" }} />

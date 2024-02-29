@@ -6,7 +6,7 @@ const ToggleThemeBtn = ({ darkTheme, toggleTheme }) => {
   return (
     <div className={styles.toggle_theme}>
       <Button onClick={toggleTheme} className={styles.toggle_theme_btn}>
-        {darkTheme ? <HiOutlineSun /> : <HiOutlineMoon />}
+        {darkTheme ? <HiOutlineSun size={18} /> : <HiOutlineMoon size={18} />}
       </Button>
     </div>
   );

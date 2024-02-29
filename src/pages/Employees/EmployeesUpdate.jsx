@@ -15,6 +15,7 @@ import {
   Space,
   message,
 } from "antd";
+import useTrim from "../../hooks/useTrim";
 
 const EmployeesUdate = () => {
   const [error, setError] = useState(false);
@@ -92,26 +93,6 @@ const EmployeesUdate = () => {
       value: "Terceirizado",
       label: "Terceirizado",
     },
-    {
-      value: "DR",
-      label: "DR",
-    },
-    {
-      value: "DN",
-      label: "DN",
-    },
-    {
-      value: "Financeiro",
-      label: "Financeiro",
-    },
-    {
-      value: "Professor",
-      label: "Professor",
-    },
-    {
-      value: "Secretaria",
-      label: "Secretaria",
-    },
   ];
 
   useEffect(() => {
@@ -163,6 +144,7 @@ const EmployeesUdate = () => {
                   name={"name"}
                   rules={[{ required: true, message: "Digite um nome" }]}
                   style={{ paddingRight: "40px" }}
+                  normalize={(text) => useTrim(text)}
                 >
                   <Input
                     placeholder="Nome do item"
@@ -177,6 +159,7 @@ const EmployeesUdate = () => {
                   name={"register"}
                   rules={[{ required: true, message: "Digite o número" }]}
                   style={{ paddingRight: "40px" }}
+                  normalize={(text) => useTrim(text)}
                 >
                   <Input placeholder="Ex.: 01234" style={{ width: "250px" }} />
                 </Form.Item>

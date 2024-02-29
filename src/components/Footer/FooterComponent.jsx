@@ -5,7 +5,9 @@ const FooterComponent = () => {
 
   return (
     <Footer className={styles.footer} theme="dark">
-      <span>&copy; {new Date().getFullYear()}</span> - Escola SESI Prata
+      <span>&copy; {new Date().getFullYear()}</span> - Escola SESI Paraíba
+      <br />
+      <small>Desenvolvido por Bruno F. Araújo</small>
     </Footer>
   );
 };

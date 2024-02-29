@@ -5,6 +5,7 @@ import { FileProtectOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import ErrorComponent from "../../components/Error/ErrorComponent";
+import useTrim from "../../hooks/useTrim";
 
 const UsersCreate = () => {
   const [form] = Form.useForm();
@@ -70,6 +71,7 @@ const UsersCreate = () => {
             <Form.Item
               label={"Número da chapa"}
               name={"username"}
+              normalize={(text) => useTrim(text)}
               rules={[{ required: true, message: "Digite o número da chapa" }]}
               required
             >
@@ -78,6 +80,7 @@ const UsersCreate = () => {
             <Form.Item
               label={"Nome"}
               name={"name"}
+              normalize={(text) => useTrim(text)}
               rules={[{ required: true, message: "Digite o nome" }]}
               required
             >
@@ -107,6 +110,10 @@ const UsersCreate = () => {
                   min: 6,
                   message: "A senha deve ter pelo menos 6 caracteres",
                 },
+                {
+                  whitespace: true,
+                  message: "Caractere inválido digitado",
+                },
               ]}
             >
               <Input.Password />
@@ -120,6 +127,10 @@ const UsersCreate = () => {
                 {
                   required: true,
                   message: "Repita a senha digitada",
+                },
+                {
+                  whitespace: true,
+                  message: "Caractere inválido digitado",
                 },
                 ({ getFieldValue }) => ({
                   validator(_, value) {

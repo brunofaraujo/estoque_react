@@ -5,6 +5,7 @@ import { FileProtectOutlined } from "@ant-design/icons";
 import axios from "axios";
 import { Button, Card, Divider, Form, Space, Input, Tag, message } from "antd";
 import { useNavigate } from "react-router-dom";
+import useTrim from "../../hooks/useTrim";
 
 const BrandsCreate = () => {
     const [error, setError] = useState(false);
@@ -64,6 +65,7 @@ const BrandsCreate = () => {
             <Form.Item
               label={"Nome"}
               name={"name"}
+              normalize={(text) => useTrim(text)}
               rules={[{ required: true, message: "Digite o nome da marca" }]}
               required
             >

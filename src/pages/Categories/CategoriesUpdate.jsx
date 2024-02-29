@@ -16,6 +16,7 @@ import {
 } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { DeleteOutlined } from "@ant-design/icons";
+import useTrim from "../../hooks/useTrim";
 
 const CategoriesUpdate = () => {
     const [error, setError] = useState(false);
@@ -124,6 +125,7 @@ const CategoriesUpdate = () => {
                    <Form.Item
                      label={"Nome"}
                      name={"name"}
+                     normalize={(text) => useTrim(text)}
                      rules={[{ required: true, message: "Digite o nome da categoria" }]}
                      required
                    >
