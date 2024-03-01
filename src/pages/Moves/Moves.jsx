@@ -1,5 +1,5 @@
 const Moves = () => {
-    return ( <><h3>Moves list</h3></> );
+    return ( <><h3>Página de relatórios</h3></> );
 }
  
 export default Moves;
