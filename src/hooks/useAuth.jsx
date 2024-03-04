@@ -3,8 +3,8 @@ import axios from "axios";
 import { UserContext } from "../context/UserContext";
 import { useNavigate } from "react-router-dom";
 
-export const useAuth = () => {
-  const { updateUser } = useContext(UserContext);
+const useAuth = () => {
+  const { updateUser, user } = useContext(UserContext);
   const [cancelled, setCancelled] = useState(false);
   const [isAuthenticated, setisAuthenticated] = useState(false);
   const token = localStorage.getItem("accessToken");
@@ -17,10 +17,11 @@ export const useAuth = () => {
   const fetchUser = async () => {
     return await axios
       .get(`${import.meta.env.VITE_API_URL}/auth/me`)
-      .then((response) => {
-        const user = updateUser(response.data);
+      .then(async (response) => {
+        await updateUser(response.data);
+        const authUser = await user;
         setisAuthenticated(true);
-        return user;
+        return authUser;
       })
       .catch((err) => {
         setisAuthenticated(false);
@@ -60,3 +61,5 @@ export const useAuth = () => {
 
   return { fetchUser, fetchLogin, isAuthenticated, logout };
 };
+
+export default useAuth;

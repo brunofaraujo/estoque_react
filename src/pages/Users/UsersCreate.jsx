@@ -3,7 +3,7 @@ import axios from "axios";
 import { Card, Space, Form, Input, Button, message } from "antd";
 import { FileProtectOutlined } from "@ant-design/icons";
 import { useEffect, useState } from "react";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import useTrim from "../../hooks/useTrim";
 

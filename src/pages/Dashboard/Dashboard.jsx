@@ -2,20 +2,23 @@ import { Button, Layout, theme } from "antd";
 import styles from "./Dashboard.module.css";
 import Logo from "../../components/Logo/Logo";
 import MenuList from "../../components/Menu/MenuList";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ToggleThemeBtn from "../../components/Menu/ToggleThemeBtn";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import FooterComponent from "../../components/Footer/FooterComponent";
-import { Navigate, Outlet, useNavigate } from "react-router-dom";
-import { useAuth } from "../../hooks/useAuth";
+import { Outlet, useNavigate } from "react-router-dom";
+import LoginMenu from "../../components/LoginMenu/LoginMenu";
+import useAuth from "../../hooks/useAuth";
+import { UserContext } from "../../context/UserContext";
 
 function Dashboard() {
   const { Header, Sider } = Layout;
   const [darkTheme, setdarkTheme] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
+  const { user } = useContext(UserContext);
+  const { fetchUser, isAuthenticated } = useAuth();
 
   const toggleTheme = () => {
     setdarkTheme(!darkTheme);
@@ -26,17 +29,13 @@ function Dashboard() {
     token: { colorBgContainer },
   } = theme.useToken();
 
-  const checkAuth = async (isAuthenticated) => {
-    (await isAuthenticated) ? true : false;
-  };
-  
   useEffect(() => {
     setdarkTheme(localStorage.getItem("darkTheme"));
   }, []);
 
   return (
     <>
-      {checkAuth(isAuthenticated) ? (
+      {fetchUser && user && (
         <Layout>
           <Sider
             collapsible
@@ -52,13 +51,24 @@ function Dashboard() {
             <ToggleThemeBtn darkTheme={darkTheme} toggleTheme={toggleTheme} />
           </Sider>
           <Layout>
-            <Header style={{ padding: 0, background: colorBgContainer }}>
+            <Header
+              style={{
+                padding: 0,
+                paddingTop: 10,
+                background: colorBgContainer,
+                display: "flex",
+                justifyContent: "space-between",
+              }}
+            >
               <Button
                 type="text"
                 className={styles.toggle_btn}
                 onClick={() => setCollapsed(!collapsed)}
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               ></Button>
+              <span style={{ marginRight: 30 }}>
+                {user && <LoginMenu user={user} />}
+              </span>
             </Header>
             <Layout>
               <Content
@@ -75,7 +85,7 @@ function Dashboard() {
             <FooterComponent />
           </Layout>
         </Layout>
-      ) : <Navigate to="/"/>}
+      )}
     </>
   );
 }

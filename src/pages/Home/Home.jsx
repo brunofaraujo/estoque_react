@@ -5,7 +5,7 @@ import sesi_logo from "../../assets/SESI-home.svg";
 import { SendOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import LoginModal from "../../components/Auth/LoginModal";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 import { useNavigate } from "react-router-dom";
 
 const Home = () => {

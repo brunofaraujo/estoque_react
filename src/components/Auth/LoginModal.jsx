@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Form, Input, Modal } from "antd";
 import { useNavigate } from "react-router-dom";
 import { ExclamationCircleFilled } from "@ant-design/icons";
-import { useAuth } from "../../hooks/useAuth";
+import useAuth from "../../hooks/useAuth";
 
 const LoginModal = ({ isOpen, setCloseModal }) => {
   const [confirmLoading, setConfirmLoading] = useState(false);
