@@ -47,7 +47,6 @@ const ItemsUpdate = () => {
   };
 
   const handleItemSubmit = async (itemData) => {
-    console.log(itemData)
     if (submitting) return;
     await axios
       .patch(`${import.meta.env.VITE_API_URL}/items/${id}`, itemData)
