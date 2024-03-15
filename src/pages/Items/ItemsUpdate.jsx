@@ -189,7 +189,7 @@ const ItemsUpdate = () => {
       {error && <ErrorComponent />}
       {loading && <LoadingSpinner />}
       {brands && categories && volumes && item && !error && (
-        <Card direction={"vertical"} style={{ width: "80dvw" }}>
+        <Card style={{ width: "80dvw" }}>
           <Divider orientation="left">Editando informações do item</Divider>
           <br />
           <Space direction={"vertical"}>

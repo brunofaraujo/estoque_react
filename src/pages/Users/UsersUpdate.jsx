@@ -17,6 +17,7 @@ import { FileProtectOutlined } from "@ant-design/icons";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { DeleteOutlined } from "@ant-design/icons";
 import { UserContext } from "../../context/UserContext";
+import useTrim from "../../hooks/useTrim";
 
 const UsersUpdate = () => {
   const { id } = useParams();
@@ -64,6 +65,7 @@ const UsersUpdate = () => {
 
   const handleSubmit = async () => {
     try {
+      setSubmitting(true);
       const values = await form.validateFields();
       let userObject = {};
       Object.entries(values).forEach(([key, value]) => {
@@ -100,6 +102,7 @@ const UsersUpdate = () => {
               "Erro! Verifique as informações digitadas e tente novamente"
             );
           }
+          setSubmitting(false);
         });
     } catch (err) {
       console.log("Error: ", err);
@@ -235,6 +238,7 @@ const UsersUpdate = () => {
                 type={"primary"}
                 htmlType="submit"
                 onClick={handleSubmit}
+                disabled={submitting}
                 icon={<FileProtectOutlined />}
               >
                 Salvar
@@ -269,6 +273,7 @@ const UsersUpdate = () => {
                 size="small"
                 ghost
                 icon={<DeleteOutlined />}
+                disabled={submitting}
               >
                 Excluir usuário
               </Button>

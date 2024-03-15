@@ -13,12 +13,13 @@ import {
 import axios from "axios";
 import dayjs from "dayjs";
 import customParseFormat from "dayjs/plugin/customParseFormat";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import { FileProtectOutlined } from "@ant-design/icons";
 import { useNavigate } from "react-router-dom";
 import useTrim from "../../hooks/useTrim";
+import { UserContext } from "../../context/UserContext";
 
 const ItemsCreate = () => {
   dayjs.extend(customParseFormat);
@@ -34,7 +35,7 @@ const ItemsCreate = () => {
   const [brands, setBrands] = useState(null);
   const [categories, setCategories] = useState(null);
   const [volumes, setVolumes] = useState(null);
-
+  const { user } = useContext(UserContext);
 
   const handleBrandChange = (value) => {
     console.log(`Selected: ${value}`);
@@ -54,7 +55,9 @@ const ItemsCreate = () => {
     });
 
     axios
-      .post(`${import.meta.env.VITE_API_URL}/items`, filteredItemData)
+      .post(`${import.meta.env.VITE_API_URL}/items`, {
+        ...filteredItemData, userId: parseInt(user.userId)
+      })
       .then((response) => {
         setSubmitting(true);
         message.success("Item cadastrado com sucesso");

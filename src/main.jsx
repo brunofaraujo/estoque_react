@@ -34,6 +34,7 @@ import CategoriesUpdate from "./pages/Categories/CategoriesUpdate.jsx";
 import Moves from "./pages/Moves/Moves.jsx";
 import MovesCreate from "./pages/Moves/MovesCreate.jsx";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner.jsx";
+import Reports from "./pages/Reports/Reports.jsx";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
@@ -151,6 +152,10 @@ const router = createBrowserRouter([
         path: "moves/create/:id",
         element: <MovesCreate />,
       },
+      {
+        path: "reports/:reportType",
+        element: <Reports />
+      }
     ],
   },
   {

@@ -13,9 +13,11 @@ const UsersCreate = () => {
   const [error, setError] = useState(false);
   const { isAuthenticated } = useAuth();
   const [loading, setLoading] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
 
   const handleSubmit = async () => {
     try {
+      setSubmitting(true);
       setLoading(true);
       const values = await form.validateFields();
       let userObject = {};
@@ -53,9 +55,10 @@ const UsersCreate = () => {
               "Erro! Verifique as informações digitadas e tente novamente"
             );
           }
+          setSubmitting(false);
         });
     } catch (err) {
-      console.log(err.errorFields);
+      setSubmitting(false);
     }
   };
 
@@ -152,6 +155,7 @@ const UsersCreate = () => {
                 htmlType="submit"
                 onClick={handleSubmit}
                 icon={<FileProtectOutlined />}
+                disabled={submitting}
               >
                 Salvar
               </Button>

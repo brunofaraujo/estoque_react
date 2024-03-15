@@ -1,4 +1,13 @@
-import { Button, Divider, Input, Popconfirm, Radio, Space, Table, message } from "antd";
+import {
+  Button,
+  Divider,
+  Input,
+  Popconfirm,
+  Radio,
+  Space,
+  Table,
+  message,
+} from "antd";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
 import { useNavigate } from "react-router-dom";
@@ -7,7 +16,7 @@ import ErrorComponent from "../../components/Error/ErrorComponent";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import ptBR from "antd/locale/pt_BR";
-import dayjs from 'dayjs';
+import dayjs from "dayjs";
 
 const Items = () => {
   const [data, setData] = useState(null);
@@ -167,11 +176,12 @@ const Items = () => {
           resObject.push({ ...value, key: value.id })
         );
         setData(resObject);
+        setLoading(false);
       })
       .catch((err) => {
         setError(true);
-      })
-      .finally(() => setLoading(false));
+        setLoading(false);
+      });
   };
 
   const showConfirmDialog = (id) => {
@@ -249,7 +259,7 @@ const Items = () => {
       key: "updatedAt",
       sorter: (a, b) => dayjs(a.updatedAt).unix() - dayjs(b.updatedAt).unix(),
       sortDirections: ["ascend", "descend", "ascend"],
-      render: (date) => (dayjs(date).format("DD/MM/YYYY HH:mm"))
+      render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
     },
     {
       title: "Ações",
@@ -276,7 +286,11 @@ const Items = () => {
             Editar
           </Radio.Button>
           <Radio.Button
-            disabled={disabled}
+            disabled={
+              disabled ||
+              data.filter((item) => item.id === id && item.supply.current > 0)
+                .length
+            }
             onClick={() => showConfirmDialog(id)}
             style={{ color: "#f5222d", fontWeight: 600 }}
           >
@@ -312,7 +326,7 @@ const Items = () => {
         title: "Validade",
         dataIndex: "expiration",
         key: "expiration",
-        render: (date) => (dayjs(date).format("DD/MM/YYYY")),
+        render: (date) => dayjs(date).format("DD/MM/YYYY"),
         hidden: record.expiration ? false : true,
       },
       {
@@ -341,8 +355,13 @@ const Items = () => {
       {loading && <LoadingSpinner />}
       {data && (
         <Popconfirm
-          title="Exclusão de item"
-          description="Tem certeza que deseja excluir o item?"
+          title="Atenção"
+          description={
+            <>
+              <p style={{fontWeight: "bold"}}>Tem certeza que deseja excluir o item?</p>
+              <p>Essa operação não poderá ser revertida</p>
+            </>
+          }
           placement={{ arrow: { pointAtCenter: true } }}
           showCancel={!confirmLoading}
           okText={"Confirmar"}

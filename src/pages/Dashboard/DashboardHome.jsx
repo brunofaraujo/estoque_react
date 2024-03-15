@@ -40,7 +40,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Movimentações</h3>}
                     value={summary.moves}
-                    prefix={<TfiExchangeVertical size={20} />}
+                    prefix={<TfiExchangeVertical size={35} style={{marginRight: 20}} />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -51,7 +51,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Itens registrados</h3>}
                     value={summary.items}
-                    prefix={<TfiAgenda size={20} />}
+                    prefix={<TfiAgenda size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -65,7 +65,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Marcas</h3>}
                     value={summary.brands}
-                    prefix={<TfiDirection size={20} />}
+                    prefix={<TfiDirection size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -76,7 +76,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Categorias</h3>}
                     value={summary.categories}
-                    prefix={<TfiViewGrid size={20} />}
+                    prefix={<TfiViewGrid size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -87,7 +87,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Tipos de volumes</h3>}
                     value={summary.volumes}
-                    prefix={<TfiDropbox  size={20} />}
+                    prefix={<TfiDropbox  size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -102,7 +102,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Colaboradores da unidade</h3>}
                     value={summary.employees}
-                    prefix={<SlPeople size={20} />}
+                    prefix={<SlPeople size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />
@@ -113,7 +113,7 @@ const DashboardHome = () => {
                   <Statistic
                     title={<h3>Usuários do sistema</h3>}
                     value={summary.users}
-                    prefix={<SlUserFollowing size={20} />}
+                    prefix={<SlUserFollowing size={35} style={{marginRight: 20}}  />}
                     groupSeparator={"."}
                     decimalSeparator={","}
                   />

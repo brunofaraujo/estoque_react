@@ -13,7 +13,9 @@ import {
   ProfileOutlined,
   AppstoreAddOutlined,
   LoginOutlined,
-  DiffOutlined
+  SnippetsOutlined,
+  FileTextOutlined,
+  MergeOutlined
 } from "@ant-design/icons";
 
 import styles from "./MenuList.module.css";
@@ -30,6 +32,7 @@ const MenuList = ({ darkTheme }) => {
     "categories",
     "brands",
     "moves",
+    "reports"
   ];
   const [openKeys, setOpenKeys] = useState(["home"]);
   const onOpenChange = (keys) => {
@@ -96,7 +99,11 @@ const MenuList = ({ darkTheme }) => {
         </Menu.Item>
       </Menu.SubMenu>
 
-      <Menu.SubMenu key="categories" title="Categorias" icon={<AppstoreAddOutlined />}>
+      <Menu.SubMenu
+        key="categories"
+        title="Categorias"
+        icon={<AppstoreAddOutlined />}
+      >
         <Menu.Item key="categories-list" icon={<OrderedListOutlined />}>
           <NavLink to={"categories"}>Listar</NavLink>
         </Menu.Item>
@@ -122,9 +129,36 @@ const MenuList = ({ darkTheme }) => {
         <Menu.Item key="move-new" icon={<LoginOutlined />}>
           <NavLink to={"moves/create"}>Nova movimentação</NavLink>
         </Menu.Item>
-        <Menu.Item key="moves-report" icon={<DiffOutlined />}>
-        <NavLink to={"moves"}>Relatórios</NavLink>
+        <Menu.Item key="moves-history" icon={<MergeOutlined />}>
+          <NavLink to={"moves"}>Histórico</NavLink>
         </Menu.Item>
+      </Menu.SubMenu>
+      <Menu.SubMenu
+        key="reports"
+        title="Relatórios"
+        icon={<SnippetsOutlined />}
+      >
+        <Menu.Item key="report-category" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/category"}>Por categoria</NavLink>
+        </Menu.Item>
+         <Menu.Item key="report-employee" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/employee"}>Por colaborador</NavLink>
+        </Menu.Item>
+        {/* <Menu.Item key="report-employee" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/employee"}>Por colaborador</NavLink>
+        </Menu.Item>
+        <Menu.Item key="report-item" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/item"}>Por item</NavLink>
+        </Menu.Item>
+        <Menu.Item key="report-brand" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/brand"}>Por marca</NavLink>
+        </Menu.Item>
+        <Menu.Item key="report-user" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/user"}>Por usuário</NavLink>
+        </Menu.Item>
+        <Menu.Item key="report-volume" icon={<FileTextOutlined />}>
+          <NavLink to={"reports/volume"}>Por volume</NavLink>
+        </Menu.Item> */}
       </Menu.SubMenu>
     </Menu>
   );
