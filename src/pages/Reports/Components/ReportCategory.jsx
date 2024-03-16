@@ -195,8 +195,6 @@ const ReportCategory = ({ report }) => {
           title: "Data",
           dataIndex: "updatedAt",
           key: "updatedAt",
-          sorter: (a, b) => a.supply.current - b.supply.current,
-          sortDirections: ["ascend", "descend", "ascend"],
           sorter: (a, b) =>
             dayjs(a.updatedAt).unix() - dayjs(b.updatedAt).unix(),
           sortDirections: ["ascend", "descend", "ascend"],
