@@ -16,6 +16,7 @@ import axios from "axios";
 import { UserContext } from "../../context/UserContext";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import useTrim from "../../hooks/useTrim";
+import { departments } from "./departments";
 
 const EmployeesCreate = () => {
   const [error, setError] = useState(false);
@@ -28,6 +29,11 @@ const EmployeesCreate = () => {
   const handleEmployeeSubmit = (employeeData) => {
     if (submitting) return;
     setSubmitting(true);
+    Object.keys(employeeData).map(
+      (key) =>
+        typeof employeeData[key] === "string" &&
+        (employeeData[key] = employeeData[key].trim())
+    );
     axios
       .post(`${import.meta.env.VITE_API_URL}/employees`, employeeData)
       .then((response) => {
@@ -53,31 +59,16 @@ const EmployeesCreate = () => {
             message.error(
               "Já existe um colaborador com o número da chapa informada"
             );
+          };
+          if (err.response.data.meta.target[0] === "name") {
+            message.error(
+              "Já existe um colaborador com o nome informado"
+            );
           }
         }
         setSubmitting(false);
       });
   };
-
-  const departments = [
-    {
-      value: "Administrativo",
-      label: "Administrativo",
-    },
-    {
-      value: "Pedagógico",
-      label: "Pedagógico",
-    },
-    {
-      value: "Terceirizado",
-      label: "Terceirizado",
-    },
-    {
-      value: "DR",
-      label: "DR",
-    },
-  ];
-
 
   useEffect(() => {
     user && setLoading(false)

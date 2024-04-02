@@ -45,6 +45,11 @@ const BrandsCreate = () => {
             message.error(
               "Falha ao criar a marca. Verifique as informações digitadas e tente novamente"
             );
+            if (err.response.data.code === "P2002") {
+              if (err.response.data.meta.target[0] === "name") {
+                message.error("Já existe uma marca com o nome informado");
+              }
+            }
             setSubmitting(false);
           });
       };

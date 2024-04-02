@@ -32,8 +32,9 @@ const CategoriesCreate = () => {
       const handleCategorySubmit = (categoryData) => {
         if (submitting) return;
         setSubmitting(true);
+
         axios
-          .post(`${import.meta.env.VITE_API_URL}/categories`, categoryData)
+          .post(`${import.meta.env.VITE_API_URL}/categories`, {...categoryData, name: categoryData.name.trim()})
           .then((response) => {
             setCategories([...categories, response.data]);
             message.success("Categoria cadastrada com sucesso");
@@ -45,6 +46,13 @@ const CategoriesCreate = () => {
             message.error(
               "Falha ao criar a categoria. Verifique as informações digitadas e tente novamente"
             );
+            if (err.response.data.code === "P2002") {
+              if (err.response.data.meta.target[0] === "name") {
+                message.error(
+                  "Já existe uma categoria com o nome informado"
+                );
+              }
+            }
             setSubmitting(false);
           });
       };

@@ -47,16 +47,17 @@ const ItemsCreate = () => {
 
   const handleItemSubmit = async (itemData) => {
     if (submitting) return;
-    const filteredItemData = {};
-    Object.entries(itemData).map((field) => {
-      if (field[1] !== undefined) {
-        filteredItemData[field[0]] = field[1];
-      }
-    });
+
+    Object.keys(itemData).map(
+      (key) =>
+        typeof itemData[key] === "string" &&
+        (itemData[key] = itemData[key].trim())
+    );
 
     axios
       .post(`${import.meta.env.VITE_API_URL}/items`, {
-        ...filteredItemData, userId: parseInt(user.userId)
+        ...itemData,
+        userId: parseInt(user.userId),
       })
       .then((response) => {
         setSubmitting(true);

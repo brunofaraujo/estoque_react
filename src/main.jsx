@@ -35,6 +35,7 @@ import Moves from "./pages/Moves/Moves.jsx";
 import MovesCreate from "./pages/Moves/MovesCreate.jsx";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner.jsx";
 import Reports from "./pages/Reports/Reports.jsx";
+import Requests from "./pages/Requests/Requests.jsx";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
@@ -153,8 +154,12 @@ const router = createBrowserRouter([
         element: <MovesCreate />,
       },
       {
-        path: "reports/:reportType",
+        path: "reports/:reportType/:itemId?",
         element: <Reports />
+      },
+      {
+        path: "requests",
+        element: <Requests />
       }
     ],
   },
@@ -175,7 +180,7 @@ const router = createBrowserRouter([
         element: <Logout />,
       },
     ],
-  },
+  }
 ], {
   basename: "/estoque"
 });

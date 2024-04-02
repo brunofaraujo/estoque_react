@@ -48,6 +48,13 @@ const ItemsUpdate = () => {
 
   const handleItemSubmit = async (itemData) => {
     if (submitting) return;
+
+    Object.keys(itemData).map(
+      (key) =>
+        typeof itemData[key] === "string" &&
+        (itemData[key] = itemData[key].trim())
+    );
+
     await axios
       .patch(`${import.meta.env.VITE_API_URL}/items/${id}`, itemData)
       .then((response) => {

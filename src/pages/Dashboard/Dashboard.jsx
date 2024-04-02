@@ -14,23 +14,25 @@ import { UserContext } from "../../context/UserContext";
 
 function Dashboard() {
   const { Header, Sider } = Layout;
-  const [darkTheme, setdarkTheme] = useState(false);
+  const [darkTheme, setDarkTheme] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const navigate = useNavigate();
   const { user } = useContext(UserContext);
-  const { fetchUser, isAuthenticated } = useAuth();
-
-  const toggleTheme = () => {
-    setdarkTheme(!darkTheme);
-    localStorage.setItem("darkTheme", !darkTheme);
-  };
+  const { fetchUser } = useAuth();
 
   const {
     token: { colorBgContainer },
   } = theme.useToken();
 
+  const toggleTheme = async () => {
+    setDarkTheme(!darkTheme);
+    localStorage.setItem("darkTheme", !darkTheme);
+  };
+
   useEffect(() => {
-    setdarkTheme(localStorage.getItem("darkTheme"));
+    localStorage.getItem("darkTheme") === "true"
+      ? setDarkTheme(true)
+      : setDarkTheme(false);
   }, []);
 
   return (

@@ -10,7 +10,7 @@ import {
 } from "antd";
 import axios from "axios";
 import { useEffect, useState, useRef } from "react";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import LoadingSpinner from "../../components/LoadingSpinner/LoadingSpinner";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { SearchOutlined } from "@ant-design/icons";
@@ -57,7 +57,6 @@ const Items = () => {
       >
         <Input
           ref={searchInput}
-          // placeholder={`Pesquisar ${dataIndex}`}
           placeholder={"Pesquisar item"}
           value={selectedKeys[0]}
           onChange={(e) =>
@@ -82,16 +81,6 @@ const Items = () => {
             Pesquisar
           </Button>
 
-          {/* <Button
-            onClick={() => clearFilters && handleReset(clearFilters)}
-            size="small"
-            style={{
-              width: 90,
-            }}
-          >
-            Limpar
-          </Button> */}
-
           <Button
             onClick={() => {
               confirm({ closeDropdown: true });
@@ -105,30 +94,6 @@ const Items = () => {
           >
             Limpar
           </Button>
-
-          {/* <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              confirm({
-                closeDropdown: false,
-              });
-              setSearchText(selectedKeys[0]);
-              setSearchedColumn(dataIndex);
-            }}
-          >
-            Filter
-          </Button>
-
-          <Button
-            type="link"
-            size="small"
-            onClick={() => {
-              close();
-            }}
-          >
-            close
-          </Button> */}
         </Space>
       </div>
     ),
@@ -223,7 +188,7 @@ const Items = () => {
       ...getColumnSearchProps("title"),
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["ascend", "descend", "ascend"],
-      defaultSortOrder: "ascend",
+      render: (title, i) => <NavLink to={`/dashboard/reports/item/${i.id}`}>{title}</NavLink>,
     },
     {
       title: "Marca",
@@ -255,11 +220,12 @@ const Items = () => {
     },
     {
       title: "Última atualização",
-      dataIndex: "updatedAt",
+      dataIndex: ["supply", "updatedAt"],
       key: "updatedAt",
-      sorter: (a, b) => dayjs(a.updatedAt).unix() - dayjs(b.updatedAt).unix(),
+      sorter: (a, b) => dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
+      defaultSortOrder: "descend",
     },
     {
       title: "Ações",

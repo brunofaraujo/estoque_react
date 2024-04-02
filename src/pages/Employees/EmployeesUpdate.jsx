@@ -16,6 +16,7 @@ import {
   message,
 } from "antd";
 import useTrim from "../../hooks/useTrim";
+import { departments } from "./departments";
 
 const EmployeesUdate = () => {
   const [error, setError] = useState(false);
@@ -31,6 +32,11 @@ const EmployeesUdate = () => {
   const handleEmployeeSubmit = (employeeData) => {
     if (submitting) return;
     setSubmitting(true);
+    Object.keys(employeeData).map(
+      (key) =>
+        typeof employeeData[key] === "string" &&
+        (employeeData[key] = employeeData[key].trim())
+    );
     axios
       .patch(`${import.meta.env.VITE_API_URL}/employees/${id}`, employeeData)
       .then((response) => {
@@ -40,9 +46,29 @@ const EmployeesUdate = () => {
         }, 1000);
       })
       .catch((err) => {
-        message.error(
-          "Falha ao atualizar o colaborador. Verifique as informações digitadas e tente novamente"
-        );
+        if (
+          err.response.data.message &&
+          err.response.data.message[0].includes("number")
+        ) {
+          message.error("O formato da chapa digitada é inválido");
+        } else {
+          message.error(
+            "Falha ao registrar colaborador. Verifique as informações digitadas e tente novamente"
+          );
+        }
+
+        if (err.response.data.code === "P2002") {
+          if (err.response.data.meta.target[0] === "register") {
+            message.error(
+              "Já existe um colaborador com o número da chapa informada"
+            );
+          };
+          if (err.response.data.meta.target[0] === "name") {
+            message.error(
+              "Já existe um colaborador com o nome informado"
+            );
+          }
+        }
         setSubmitting(false);
       });
   };
@@ -80,20 +106,6 @@ const EmployeesUdate = () => {
       });
   };
 
-  const departments = [
-    {
-      value: "Administrativo",
-      label: "Administrativo",
-    },
-    {
-      value: "Pedagógico",
-      label: "Pedagógico",
-    },
-    {
-      value: "Terceirizado",
-      label: "Terceirizado",
-    },
-  ];
 
   useEffect(() => {
     axios

@@ -25,7 +25,6 @@ const UsersUpdate = () => {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(undefined);
   const [error, setError] = useState(false);
-  const [done, setDone] = useState(false);
   const [showPasswordFields, setShowPasswordFields] = useState(false);
   const [openConfirmWindow, setOpenConfirmWindow] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
@@ -34,7 +33,9 @@ const UsersUpdate = () => {
   const { user: authUser } = useContext(UserContext);
 
   const getUser = (id) => {
-    if (done) return;
+    if (submitting) return;
+    setSubmitting(true);
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_URL}/users/${id}`)
       .then((response) => {
@@ -44,10 +45,12 @@ const UsersUpdate = () => {
           name: response.data.name,
           email: response.data.email,
         });
-      })
-      .finally(() => {
+        setSubmitting(false);
         setLoading(false);
-        setDone(true);
+      })
+      .catch((err) => {
+        setError(true);
+        setLoading(false);
       });
   };
 
@@ -63,50 +66,51 @@ const UsersUpdate = () => {
     }
   };
 
-  const handleSubmit = async () => {
-    try {
-      setSubmitting(true);
-      const values = await form.validateFields();
-      let userObject = {};
-      Object.entries(values).forEach(([key, value]) => {
-        if (key !== "password2") {
-          userObject[key] = value;
-        }
-      });
-      axios
-        .patch(`${import.meta.env.VITE_API_URL}/users/${id}`, userObject)
-        .then((response) => {
-          message.success("Informações atualizadas");
-          setTimeout(() => {
-            navigate("/dashboard/users");
-          }, 1300);
-        })
-        .catch((err) => {
-          if (err.response.data.code === "P2002") {
-            if (err.response.data.meta.target[0] === "username") {
-              message.error(
-                "Já existe um usuário com o número da chapa informada"
-              );
-            }
-            if (err.response.data.meta.target[0] === "email") {
-              message.error("Já existe um usuário com o e-mail informado");
-            }
-          }
-          if (
-            err.response.data.message &&
-            err.response.data.message[0].includes("username must be shorter")
-          ) {
-            message.error("O número da chapa deve conter 5 dígitos");
-          } else {
+  const handleSubmit = (userData) => {
+    if (submitting) return;
+    setSubmitting(true);
+    Object.keys(userData).map(
+      (key) =>
+        userData[key] !== "password" &&
+        userData[key] !== "password2" &&
+        typeof userData[key] === "string" &&
+        (userData[key] = userData[key].trim())
+    );
+    const { password2, ...restUserData } = userData;
+    axios
+      .patch(`${import.meta.env.VITE_API_URL}/users/${id}`, restUserData)
+      .then((response) => {
+        message.success("Informações atualizadas");
+        setTimeout(() => {
+          navigate("../users");
+        }, 1500);
+      })
+      .catch((err) => {
+        if (err.response.data.code === "P2002") {
+          if (err.response.data.meta.target[0] === "username") {
             message.error(
-              "Erro! Verifique as informações digitadas e tente novamente"
+              "Já existe um usuário com o número da chapa informada"
             );
           }
-          setSubmitting(false);
-        });
-    } catch (err) {
-      console.log("Error: ", err);
-    }
+          if (err.response.data.meta.target[0] === "email") {
+            message.error("Já existe um usuário com o e-mail informado");
+          }
+          if (err.response.data.meta.target[0] === "name") {
+            message.error("Já existe um usuário com nome informado");
+          }
+        }
+        if (
+          err.response.data.message &&
+          err.response.data.message[0].includes("username must")
+        ) {
+          message.error("O número da chapa deve conter 5 dígitos");
+        } else {
+          message.error(
+            "Erro! Verifique as informações digitadas e tente novamente"
+          );
+        }
+        setSubmitting(false);
+      });
   };
 
   const handleDelete = () => {
@@ -147,7 +151,12 @@ const UsersUpdate = () => {
         <Divider orientation="left">Editando informações do usuário</Divider>
         <br />
         <Space direction="vertical">
-          <Form name={"updated_user"} form={form} disabled={submitting}>
+          <Form
+            name={"user"}
+            form={form}
+            disabled={submitting}
+            onFinish={(e) => handleSubmit(e)}
+          >
             <Form.Item
               label={"Número da chapa"}
               name={"username"}
@@ -237,7 +246,6 @@ const UsersUpdate = () => {
               <Button
                 type={"primary"}
                 htmlType="submit"
-                onClick={handleSubmit}
                 disabled={submitting}
                 icon={<FileProtectOutlined />}
               >

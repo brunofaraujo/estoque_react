@@ -32,6 +32,11 @@ const VolumesCreate = () => {
   const handleVolumeSubmit = (volumeData) => {
     if (submitting) return;
     setSubmitting(true);
+    Object.keys(volumeData).map(
+      (key) =>
+        typeof volumeData[key] === "string" &&
+        (volumeData[key] = volumeData[key].trim())
+    );
     axios
       .post(`${import.meta.env.VITE_API_URL}/volumes`, volumeData)
       .then((response) => {
@@ -45,6 +50,11 @@ const VolumesCreate = () => {
         message.error(
           "Falha ao criar o volume. Verifique as informações digitadas e tente novamente"
         );
+        if (err.response.data.code === "P2002") {
+          if (err.response.data.meta.target[0] === "name") {
+            message.error("Já existe um volume com o nome informado");
+          }
+        }
         setSubmitting(false);
       });
   };
@@ -97,7 +107,9 @@ const VolumesCreate = () => {
             Volumes cadastrados
           </Divider>
           {volumes.map((volume) => (
-            <Tag key={volume.id} style={{margin: "5px"}}>{volume.name}</Tag>
+            <Tag key={volume.id} style={{ margin: "5px" }}>
+              {volume.name}
+            </Tag>
           ))}
         </Card>
       )}

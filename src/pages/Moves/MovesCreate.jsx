@@ -49,7 +49,7 @@ const MovesCreate = () => {
           const detailsObj = [];
           Object.keys(response.data).forEach((field) => {
             field === "batch" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Lote",
@@ -57,14 +57,14 @@ const MovesCreate = () => {
                 span: 3,
               });
             field === "category" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Categoria",
                 children: response.data[field].name,
               });
             field === "description" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Descrição",
@@ -72,14 +72,14 @@ const MovesCreate = () => {
                 span: 4,
               });
             field === "expiration" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Validade",
                 children: dayjs(response.data[field]).format("DD/MM/YYYY"),
               });
             field === "register" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Patrimônio",
@@ -87,7 +87,7 @@ const MovesCreate = () => {
                 span: 3,
               });
             field === "serial" &&
-              response.data[field] !== null &&
+              response.data[field] &&
               detailsObj.push({
                 key: field,
                 label: "Serial",
@@ -144,7 +144,7 @@ const MovesCreate = () => {
       .then((response) => {
         message.success("Movimentação realizada com sucesso!");
         setTimeout(() => {
-          navigate("/dashboard/moves");
+          navigate("/dashboard/items");
         }, 1000);
       })
       .catch((error) => {
@@ -375,7 +375,6 @@ const MovesCreate = () => {
                               placeholder="Escolha o colaborador"
                               allowClear
                               optionFilterProp="children"
-                              disabled={moveType === "I"}
                               filterOption={(input, option) =>
                                 option.children
                                   .toUpperCase()

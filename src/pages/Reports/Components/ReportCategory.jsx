@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import LoadingSpinner from "../../../components/LoadingSpinner/LoadingSpinner";
 import ErrorComponent from "../../../components/Error/ErrorComponent";
 import Highlighter from "react-highlight-words";
@@ -21,8 +21,9 @@ import { FileProtectOutlined } from "@ant-design/icons";
 import dayjs from "dayjs";
 import ptBR from "antd/locale/pt_BR";
 import { SearchOutlined } from "@ant-design/icons";
+import { UserContext } from "../../../context/UserContext";
 
-const ReportCategory = ({ report }) => {
+const ReportCategory = () => {
   const [categories, setCategories] = useState(undefined);
   const [error, setError] = useState(false);
   const [loading, setLoading] = useState(true);
@@ -32,6 +33,7 @@ const ReportCategory = ({ report }) => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
+  const {user} = useContext(UserContext);
 
   useEffect(() => {
     getData();
@@ -164,16 +166,15 @@ const ReportCategory = ({ report }) => {
           title: "Item",
           dataIndex: "title",
           key: "title",
-          width: "50%",
+          width: "45%",
           ...getColumnSearchProps("title"),
           sorter: (a, b) => a.title.localeCompare(b.title),
           sortDirections: ["ascend", "descend", "ascend"],
-          defaultSortOrder: "ascend",
         },
         {
-          title: "Quantidade",
+          title: "Em estoque",
           dataIndex: ["supply", "current"],
-          key: "supply",
+          key: "current",
           width: "10%",
           sorter: (a, b) => a.supply.current - b.supply.current,
           sortDirections: ["ascend", "descend", "ascend"],
@@ -192,30 +193,38 @@ const ReportCategory = ({ report }) => {
       title: "Última movimentação",
       children: [
         {
+          title: "Qtd. mov.",
+          dataIndex: ["supply", "history", 0, "amount"],
+          sorter: (a, b) => a.supply.history[0].amount - b.supply.history[0].amount,
+          width: "8%"
+        },
+        {
           title: "Data",
-          dataIndex: "updatedAt",
+          dataIndex: ["supply", "updatedAt"],
           key: "updatedAt",
-          sorter: (a, b) =>
-            dayjs(a.updatedAt).unix() - dayjs(b.updatedAt).unix(),
+          width: "10%",
+          sorter: (a, b) => dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
           sortDirections: ["ascend", "descend", "ascend"],
           render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
+          defaultSortOrder: "descend",
         },
         {
           title: "Tipo",
-          dataIndex: ["supply", "history"],
+          dataIndex: ["supply", "history", 0],
           key: "type",
-          sorter: (a, b) => a.supply.current - b.supply.current,
+          width: "8%",
+          sorter: (a, b) => a.supply.history[0]["type"].localeCompare(b.supply.history[0]["type"]),
           sortDirections: ["ascend", "descend", "ascend"],
           render: (data) =>
-            data && data[0].type === "I" ? "Entrada" : "Saída",
+            data && data.type === "I" ? "Entrada" : "Saída",
         },
         {
           title: "Operador",
-          dataIndex: ["supply", "history"],
-          sorter: (a, b) => a.supply.current - b.supply.current,
+          dataIndex: ["supply", "history", 0, "user"],
+          sorter: (a, b) =>  a.supply.history[0].user.name.localeCompare(b.supply.history[0].user.name),
           sortDirections: ["ascend", "descend", "ascend"],
           key: "user",
-          render: (data) => data && data[0].user.name.split(" ")[0],
+          render: (data) => data && data.name.split(" ")[0],
         },
       ],
     },
@@ -399,8 +408,8 @@ const ReportCategory = ({ report }) => {
                   size="large"
                   bordered
                   footer={() =>
-                    `Relatório gerado em ${dayjs().format(
-                      "DD/MM/YYYY - HH:mm:ss"
+                    `Relatório gerado por ${user.name} em ${dayjs().format(
+                      "DD/MM/YYYY - HH:mm"
                     )}`
                   }
                 />

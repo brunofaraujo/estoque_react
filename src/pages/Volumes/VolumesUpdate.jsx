@@ -60,6 +60,11 @@ const VolumesUpdate = () => {
   const handleVolumeSubmit = (volumeData) => {
     if (submitting) return;
     setSubmitting(true);
+    Object.keys(volumeData).map(
+      (key) =>
+        typeof volumeData[key] === "string" &&
+        (volumeData[key] = volumeData[key].trim())
+    );
     axios
       .patch(`${import.meta.env.VITE_API_URL}/volumes/${id}`, volumeData)
       .then((response) => {
@@ -72,6 +77,11 @@ const VolumesUpdate = () => {
         message.error(
           "Falha ao atualizar o volume. Verifique as informações digitadas e tente novamente"
         );
+        if (err.response.data.code === "P2002") {
+          if (err.response.data.meta.target[0] === "name") {
+            message.error("Já existe um volume com o nome informado");
+          }
+        }
         setSubmitting(false);
       });
   };
@@ -89,10 +99,12 @@ const VolumesUpdate = () => {
       })
       .catch((error) => {
         if (error.response.data.code && error.response.data.code === "P2003") {
-          message.error("Erro! Volumes com items associados não podem ser removidos")
+          message.error(
+            "Erro! Volumes com items associados não podem ser removidos"
+          );
         } else {
           message.error("Falha ao atualizar o volume");
-        }        
+        }
         setSubmitting(false);
         setConfirmLoading(false);
       });

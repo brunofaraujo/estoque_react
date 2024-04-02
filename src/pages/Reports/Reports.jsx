@@ -5,6 +5,7 @@ import ErrorComponent from "../../components/Error/ErrorComponent";
 import { Card, Divider, Flex, Layout } from "antd";
 import { Content } from "antd/es/layout/layout";
 import ReportEmployee from "./Components/ReportEmployee";
+import ReportItem from "./Components/ReportItem";
 
 const Reports = () => {
   const { reportType } = useParams();
@@ -17,6 +18,9 @@ const Reports = () => {
         break;
       case "employee":
         translated = "Colaborador";
+        break;
+      case "item":
+        translated = "Item";
         break;
     }
     return translated;
@@ -42,6 +46,9 @@ const Reports = () => {
                 )}
                 {reportType === "employee" && (
                   <ReportEmployee report={reportType} />
+                )}
+                {reportType === "item" && (
+                  <ReportItem report={reportType} />
                 )}
               </Flex>
             </Content>
