@@ -1,5 +1,4 @@
 import { Button, Layout, theme } from "antd";
-import styles from "./Dashboard.module.css";
 import Logo from "../../components/Logo/Logo";
 import MenuList from "../../components/Menu/MenuList";
 import { useContext, useEffect, useState } from "react";
@@ -7,7 +6,7 @@ import ToggleThemeBtn from "../../components/Menu/ToggleThemeBtn";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import FooterComponent from "../../components/Footer/FooterComponent";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet } from "react-router-dom";
 import LoginMenu from "../../components/LoginMenu/LoginMenu";
 import useAuth from "../../hooks/useAuth";
 import { UserContext } from "../../context/UserContext";
@@ -16,7 +15,6 @@ function Dashboard() {
   const { Header, Sider } = Layout;
   const [darkTheme, setDarkTheme] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const navigate = useNavigate();
   const { user } = useContext(UserContext);
   const { fetchUser } = useAuth();
 
@@ -38,13 +36,12 @@ function Dashboard() {
   return (
     <>
       {fetchUser && user && (
-        <Layout>
+        <Layout style={{minHeight: "20dvh"}}>
           <Sider
             collapsible
             collapsed={collapsed}
             trigger={null}
             theme={darkTheme ? "dark" : "light"}
-            className={styles.sidebar}
             width={250}
             collapsedWidth={100}
           >
@@ -64,7 +61,6 @@ function Dashboard() {
             >
               <Button
                 type="text"
-                className={styles.toggle_btn}
                 onClick={() => setCollapsed(!collapsed)}
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
               ></Button>
@@ -77,8 +73,7 @@ function Dashboard() {
                 style={{
                   display: "flex",
                   width: "100%",
-                  padding: 100,
-                  justifyContent: "center",
+                  justifyContent: "center"
                 }}
               >
                 <Outlet />

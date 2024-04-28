@@ -10,7 +10,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@tanstack/react-query": "^5.17.19",
+    "@tsparticles/preset-links": "^3.0.2",
+    "@tsparticles/react": "^3.0.0",
+    "@tsparticles/slim": "^3.3.0",
     "antd": "^5.14.1",
     "axios": "^1.6.6",
     "dayjs": "^1.11.10",
@@ -22,7 +24,6 @@
     "react-router-dom": "^6.21.3"
   },
   "devDependencies": {
-    "@tanstack/eslint-plugin-query": "^5.17.20",
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",

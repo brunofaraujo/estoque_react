@@ -36,6 +36,7 @@ import MovesCreate from "./pages/Moves/MovesCreate.jsx";
 import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner.jsx";
 import Reports from "./pages/Reports/Reports.jsx";
 import Requests from "./pages/Requests/Requests.jsx";
+import OpenRequest from "./pages/OpenRequest/OpenRequest.jsx";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
@@ -47,148 +48,155 @@ axios.interceptors.request.use(function (config) {
   return config;
 });
 
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    errorElement: <ErrorPage />,
-    children: [
-      {
-        index: true,
-        element: <Home />,
-      },
-    ],
-  },
-  {
-    path: "/dashboard",
-    element: <Dashboard />,
-    errorElement: <ErrorPage />,
+const router = createBrowserRouter(
+  [
+    {
+      path: "/",
+      element: <App />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <Home />,
+        },
+      ],
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
+      errorElement: <ErrorPage />,
 
-    children: [
-      {
-        path: "/dashboard",
-        element: <DashboardHome />,
-      },
-      {
-        path: "items",
-        element: <Items />,
-      },
-      {
-        path: "items/create",
-        element: <ItemsCreate />,
-      },
-      {
-        path: "items/update/:id",
-        element: <ItemsUpdate />,
-      },
-      {
-        path: "users",
-        element: <Users />,
-      },
-      {
-        path: "users/create",
-        element: <UsersCreate />,
-      },
-      {
-        path: "users/update/:id",
-        element: <UsersUpdate />,
-      },
-      {
-        path: "volumes",
-        element: <Volumes />,
-      },
-      {
-        path: "volumes/create",
-        element: <VolumesCreate />,
-      },
-      {
-        path: "volumes/update/:id",
-        element: <VolumesUpdate />,
-      },
-      {
-        path: "employees",
-        element: <Employees />,
-      },
-      {
-        path: "employees/create",
-        element: <EmployeesCreate />,
-      },
-      {
-        path: "employees/update/:id",
-        element: <EmployeesUpdate />,
-      },
-      {
-        path: "categories",
-        element: <Categories />,
-      },
-      {
-        path: "categories/create",
-        element: <CategoriesCreate />,
-      },
-      {
-        path: "categories/update/:id",
-        element: <CategoriesUpdate />,
-      },
-      {
-        path: "brands",
-        element: <Brands />,
-      },
-      {
-        path: "brands/create",
-        element: <BrandsCreate />,
-      },
-      {
-        path: "brands/update/:id",
-        element: <BrandsUpdate />,
-      },
-      {
-        path: "moves",
-        element: <Moves />,
-      },
-      {
-        path: "moves/create",
-        element: <MovesCreate />,
-      },
-      {
-        path: "moves/create/:id",
-        element: <MovesCreate />,
-      },
-      {
-        path: "reports/:reportType/:itemId?",
-        element: <Reports />
-      },
-      {
-        path: "requests",
-        element: <Requests />
-      }
-    ],
-  },
+      children: [
+        {
+          path: "/dashboard",
+          element: <DashboardHome />,
+        },
+        {
+          path: "items",
+          element: <Items />,
+        },
+        {
+          path: "items/create",
+          element: <ItemsCreate />,
+        },
+        {
+          path: "items/update/:id",
+          element: <ItemsUpdate />,
+        },
+        {
+          path: "users",
+          element: <Users />,
+        },
+        {
+          path: "users/create",
+          element: <UsersCreate />,
+        },
+        {
+          path: "users/update/:id",
+          element: <UsersUpdate />,
+        },
+        {
+          path: "volumes",
+          element: <Volumes />,
+        },
+        {
+          path: "volumes/create",
+          element: <VolumesCreate />,
+        },
+        {
+          path: "volumes/update/:id",
+          element: <VolumesUpdate />,
+        },
+        {
+          path: "employees",
+          element: <Employees />,
+        },
+        {
+          path: "employees/create",
+          element: <EmployeesCreate />,
+        },
+        {
+          path: "employees/update/:id",
+          element: <EmployeesUpdate />,
+        },
+        {
+          path: "categories",
+          element: <Categories />,
+        },
+        {
+          path: "categories/create",
+          element: <CategoriesCreate />,
+        },
+        {
+          path: "categories/update/:id",
+          element: <CategoriesUpdate />,
+        },
+        {
+          path: "brands",
+          element: <Brands />,
+        },
+        {
+          path: "brands/create",
+          element: <BrandsCreate />,
+        },
+        {
+          path: "brands/update/:id",
+          element: <BrandsUpdate />,
+        },
+        {
+          path: "moves",
+          element: <Moves />,
+        },
+        {
+          path: "moves/create",
+          element: <MovesCreate />,
+        },
+        {
+          path: "moves/create/:id",
+          element: <MovesCreate />,
+        },
+        {
+          path: "reports/:reportType/:itemId?",
+          element: <Reports />,
+        },
+        {
+          path: "requests",
+          element: <Requests />,
+        },
+      ],
+    },
+    {
+      path: "/request",
+      element: <OpenRequest />,
+    },
+    {
+      path: "/auth",
+      element: <Auth />,
+      children: [
+        {
+          path: "signin",
+          element: <AuthLoginPage />,
+        },
+        {
+          path: "register",
+          element: <RegisterPage />,
+        },
+        {
+          path: "logout",
+          element: <Logout />,
+        },
+      ],
+    },
+  ],
   {
-    path: "/auth",
-    element: <Auth />,
-    children: [
-      {
-        path: "signin",
-        element: <AuthLoginPage />,
-      },
-      {
-        path: "register",
-        element: <RegisterPage />,
-      },
-      {
-        path: "logout",
-        element: <Logout />,
-      },
-    ],
+    basename: "/estoque",
   }
-], {
-  basename: "/estoque"
-});
+);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
-        <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+      <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
     </UserProvider>
   </React.StrictMode>
 );
