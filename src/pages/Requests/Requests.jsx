@@ -10,6 +10,8 @@ import {
   Select,
   Table,
   Tag,
+  Modal,
+  Button,
 } from "antd";
 import dayjs from "dayjs";
 import { UserContext } from "../../context/UserContext";
@@ -41,22 +43,34 @@ const Requests = () => {
   }, []);
 
   const handleChangeStatus = (id, value) => {
-    axios
-      .patch(`${import.meta.env.VITE_API_URL}/requests/${id}`, {
-        status: value,
-        userId: parseInt(authUser.userId),
-      })
-      .then((response) => {
-        getRequests();
-      })
-      .catch((error) => setError(true));
+    return Modal.info({
+      centered: true,
+      closable: false,
+      title: (
+        <>
+          <p>Confirma a operação?</p>
+          <p>O usuário será notificado sobre essa decisão</p>
+        </>
+      ),
+      okCancel: true,
+      onOk() {
+        axios
+          .patch(`${import.meta.env.VITE_API_URL}/requests/${id}`, {
+            status: value,
+            userId: parseInt(authUser.userId),
+          })
+          .then((response) => {
+            getRequests();
+          })
+          .catch((error) => setError(true));
+      },
+    });
   };
 
   const columns = [
     {
       title: "Solicitante",
       key: "requester",
-      width: "30%",
       sorter: (a, b) => a.requester.name.localeCompare(b.requester.name),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (_, employee) =>
@@ -94,7 +108,7 @@ const Requests = () => {
             </Tag>
           );
       },
-      width: "15%",
+      // width: "15%",
     },
     {
       title: "Data solicitação",
@@ -103,7 +117,7 @@ const Requests = () => {
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
-      width: "12%",
+      // width: "12%",
     },
     {
       title: "Última atualização",
@@ -113,7 +127,8 @@ const Requests = () => {
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
       defaultSortOrder: "descend",
-      width: "12%",
+      responsive: ["md"],
+      // width: "12%",
     },
     {
       title: "Operador",
@@ -122,7 +137,7 @@ const Requests = () => {
       sorter: (a, b) => a.user.name.localeCompare(b.user.name),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (u) => u && u.split(" ")[0],
-      width: "10%",
+      responsive: ["md"],
     },
     {
       title: "Ações",
@@ -150,7 +165,7 @@ const Requests = () => {
           ]}
         ></Select>
       ),
-      width: "10%",
+      // width: "10%",
     },
   ];
 
@@ -160,7 +175,7 @@ const Requests = () => {
 
     const cls = [
       {
-        title: "Itens",
+        title: "Material",
         dataIndex: "item",
         key: "title",
         render: (i) => `${i.title} (${i.brand.name}) - ${i.volume.name}`,
@@ -177,7 +192,7 @@ const Requests = () => {
   const showExpandedRow = (record) => {
     const expdColumns = [
       {
-        title: "Descrição/Justificativa",
+        title: "Justificativa",
         dataIndex: "description",
         key: "description",
         hidden: record.description ? false : true,
@@ -202,11 +217,14 @@ const Requests = () => {
       {loading && <LoadingSpinner />}
       {error && <ErrorComponent />}
       {requests && !error && (
-        <Card bordered style={{ width: "80dvw" }}>
+        <Card
+          bordered
+          style={{ width: "max-content", minWidth: "100%", overflow: "auto" }}
+        >
           <Divider orientation="left">Solicitações</Divider>
           <br />
           <Layout style={{ backgroundColor: "#fff" }}>
-            <Flex justify={"flex-start"} align={"flex-start"}>
+            <Flex>
               <Table
                 columns={columns}
                 dataSource={requests}

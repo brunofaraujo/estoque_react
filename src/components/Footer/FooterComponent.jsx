@@ -10,8 +10,8 @@ const FooterComponent = () => {
         <Col className={styles.escola_sesi_logo_container}>
         <img src={escola_sesi_logo} className={styles.escola_sesi_logo} />
         </Col>
-        <Col>
-          <span>&copy; {new Date().getFullYear()}</span> - Escola SESI Paraíba
+        <Col className={styles.footer_text}>
+          <span>&copy; {new Date().getFullYear()} - Escola SESI Paraíba</span>
           <br />
           <small>Desenvolvido por Bruno F. Araújo</small>{" "}
         </Col>

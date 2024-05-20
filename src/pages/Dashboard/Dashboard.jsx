@@ -36,14 +36,18 @@ function Dashboard() {
   return (
     <>
       {fetchUser && user && (
-        <Layout style={{minHeight: "20dvh"}}>
+        <Layout style={{ minHeight: "20dvh" }}>
           <Sider
             collapsible
             collapsed={collapsed}
             trigger={null}
             theme={darkTheme ? "dark" : "light"}
             width={250}
-            collapsedWidth={100}
+            breakpoint="md"
+            collapsedWidth={80}
+            onBreakpoint={(broken) => {
+              setCollapsed(broken);
+            }}
           >
             <Logo />
             <MenuList darkTheme={darkTheme} />
@@ -72,8 +76,8 @@ function Dashboard() {
               <Content
                 style={{
                   display: "flex",
-                  width: "100%",
-                  justifyContent: "center"
+                  justifyContent: "flex-start",
+                  overflow: "auto",
                 }}
               >
                 <Outlet />

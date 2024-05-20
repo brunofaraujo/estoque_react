@@ -17,6 +17,8 @@ import {
   Modal,
   Result,
   Layout,
+  Typography,
+  Flex,
 } from "antd";
 import { useEffect, useState } from "react";
 import {
@@ -51,20 +53,40 @@ const OpenRequest = () => {
     useState("");
   const navigate = useNavigate();
   const [form] = Form.useForm();
-  const { Option } = Select;
   const { TextArea } = Input;
   const { Content } = Layout;
+  const { Text } = Typography;
+  const MAX_AMOUNT = 1000;
   const getEmployees = () => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/requests/employees`)
-      .then((response) => setEmployees(response.data))
+      .then((response) => {
+        const employeesResponse = response.data.map((employee) => {
+          return {
+            value: employee.id,
+            label: employee.name,
+            key: `em${employee.id}`,
+          };
+        });
+        setEmployees(employeesResponse);
+      })
+
       .catch((error) => setError(true));
   };
 
   const getItems = () => {
     axios
       .get(`${import.meta.env.VITE_API_URL}/requests/items`)
-      .then((response) => setItems(response.data))
+      .then((response) => {
+        const itemsResponse = response.data.map((item) => {
+          return {
+            key: `it${item.id}`,
+            label: `${item.title} - ${item.volume.name}`,
+            value: item.id,
+          };
+        });
+        setItems(itemsResponse);
+      })
       .catch((error) => setError(true));
   };
 
@@ -80,8 +102,8 @@ const OpenRequest = () => {
     setSelectedEmployee(employeeId);
   };
 
-  const handleDescriptionChange = (e) => {
-    setDescription(e.target.value);
+  const handleDescriptionChange = (desc) => {
+    setDescription(desc.target.value.trim());
   };
 
   const handleAddItem = () => {
@@ -102,7 +124,6 @@ const OpenRequest = () => {
       description: description,
       requestAmounts: selectedList,
     };
-
     setSubmitting(true);
     axios
       .post(`${import.meta.env.VITE_API_URL}/requests`, requestObject)
@@ -194,12 +215,13 @@ const OpenRequest = () => {
                             message: "Selecione um colaborador",
                           },
                         ]}
+                        required
                       >
                         <ConfigProvider
                           theme={{
                             components: {
                               Select: {
-                                fontSize: 11,
+                                fontSize: 13,
                               },
                             },
                           }}
@@ -208,24 +230,12 @@ const OpenRequest = () => {
                             showSearch
                             placeholder="Colaborador"
                             allowClear
-                            optionFilterProp="children"
+                            optionFilterProp="label"
                             size="small"
                             onChange={onChangeEmployee}
-                            filterOption={(input, option) =>
-                              option.children
-                                .toUpperCase()
-                                .indexOf(input.toUpperCase()) !== -1
-                            }
-                          >
-                            {employees.map((employee) => (
-                              <Option
-                                value={employee.id}
-                                key={`e${employee.id}`}
-                              >
-                                {employee.name}
-                              </Option>
-                            ))}
-                          </Select>
+                            filterOption
+                            options={employees}
+                          />
                         </ConfigProvider>
                       </Form.Item>
                     </Card>
@@ -244,8 +254,10 @@ const OpenRequest = () => {
                       <Form.Item
                         name="description"
                         rules={[
-                          { required: true, message: "Campo necessário" },
+                          { type: "string" },
+                          { max: 255, message: "Limite de texto excedido" },
                         ]}
+                        required
                       >
                         <TextArea
                           autoSize={{
@@ -270,7 +282,7 @@ const OpenRequest = () => {
                     xl={8}
                     className={styles.col}
                   >
-                    <Card title="Item" size="small">
+                    <Card title="Seleção de itens" size="small">
                       <Form.Item
                         name="itemId"
                         rules={[{ required: true, message: "Defina um item" }]}
@@ -279,7 +291,8 @@ const OpenRequest = () => {
                           theme={{
                             components: {
                               Select: {
-                                fontSize: 10,
+                                fontSize: 12,
+                                fontWeightStrong: 700,
                               },
                             },
                           }}
@@ -288,30 +301,20 @@ const OpenRequest = () => {
                             showSearch
                             placeholder="Escolha o item"
                             allowClear
-                            optionFilterProp="children"
-                            popupMatchSelectWidth={false}
+                            optionFilterProp="label"
+                            popupMatchSelectWidth={true}
                             size="small"
                             onChange={onChangeItem}
-                            filterOption={(input, option) =>
-                              option.children
-                                .toUpperCase()
-                                .indexOf(input.toUpperCase()) !== -1
-                            }
-                          >
-                            {items.map((item) => (
-                              <Option
-                                value={item.id}
-                                key={`i${item.id}`}
-                              >{`${item.title} - ${item.brand.name} - ${item.volume.name}`}</Option>
-                            ))}
-                          </Select>
+                            filterOption
+                            options={items}
+                          />
                         </ConfigProvider>
                       </Form.Item>
                       <Divider orientation="left" plain>
                         Quantidade
                       </Divider>
-                      <Space direction="horizontal" size="small">
-                        <Space.Compact>
+                      <Space direction="horizontal" size="middle">
+                        <Space.Compact style={{ width: "100%" }}>
                           <Form.Item
                             name="amount"
                             rules={[
@@ -323,10 +326,15 @@ const OpenRequest = () => {
                                 pattern: new RegExp(/^[1-9]\d*$/g),
                                 message: "Inválido",
                               },
+                              {
+                                type: "number",
+                                max: MAX_AMOUNT,
+                                message: "Excesso",
+                              },
                             ]}
                           >
                             <InputNumber
-                              style={{ width: "4rem" }}
+                              style={{ minWidth: "1rem" }}
                               size="small"
                               disabled={!selectedItem}
                               onChange={onChangeAmount}
@@ -344,7 +352,9 @@ const OpenRequest = () => {
                                 !selectedAmount ||
                                 selectedList.filter(
                                   (item) => item.itemId === selectedItem
-                                ).length > 0
+                                ).length > 0 ||
+                                !Number.isInteger(selectedAmount) ||
+                                selectedAmount > MAX_AMOUNT
                               }
                             >
                               Adicionar
@@ -370,30 +380,51 @@ const OpenRequest = () => {
                           <List>
                             {selectedList.map((item) => {
                               const filtered = items.filter(
-                                (sel) => sel.id === item.itemId
+                                (sel) => sel.value === item.itemId
                               );
-
                               return (
                                 <List.Item
-                                  key={`s${filtered[0]["id"]}${Math.floor(
+                                  key={`s${filtered[0]["value"]}${Math.floor(
                                     Math.random() * (10000 - 1) + 1
                                   )}`}
-                                  actions={[
+                                >
+                                  <Flex
+                                    align="start"
+                                    justify="space-between"
+                                    gap={2}
+                                    style={{ width: "100%" }}
+                                  >
+                                    <Tag
+                                      color="#108ee9"
+                                      style={{
+                                        minWidth: "auto",
+                                        marginRight: 0,
+                                      }}
+                                    >{`${item.amount}`}</Tag>
+                                    <Tooltip title={`${filtered[0]["label"]}`}>
+                                      <Text
+                                        ellipsis
+                                        style={{
+                                          marginLeft: 0,
+                                          minWidth: "65%",
+                                          width: "100%",
+                                          fontSize: "0.77rem",
+                                        }}
+                                      >{`${filtered[0]["label"]}`}</Text>
+                                    </Tooltip>
                                     <Tooltip title="Remover item">
                                       <Button
                                         size="small"
                                         type="primary"
                                         danger
                                         icon={<MinusCircleOutlined />}
+                                        style={{ minWidth: 30 }}
                                         onClick={() =>
                                           handleRemoveItem(item.itemId)
                                         }
                                       />
-                                    </Tooltip>,
-                                  ]}
-                                >
-                                  <Tag color="#108ee9">{`${item.amount}`}</Tag>{" "}
-                                  {`${filtered[0]["title"]} - ${filtered[0]["volume"]["name"]}`}
+                                    </Tooltip>
+                                  </Flex>
                                 </List.Item>
                               );
                             })}
@@ -414,7 +445,10 @@ const OpenRequest = () => {
                           className={styles.btn_send}
                           onClick={handleSubmitRequest}
                           disabled={
-                            submitting || !selectedEmployee || !description
+                            submitting ||
+                            !selectedEmployee ||
+                            !description ||
+                            description === ""
                           }
                           type="primary"
                           block
@@ -463,11 +497,19 @@ const OpenRequest = () => {
                   }
                   subTitle={
                     requestStatusAuthorized === undefined ? (
-                      <h3>Para confirmar a solicitação de material, digite o código de validação que foi enviado para o seu endereço de e-mail.</h3>
+                      <h3>
+                        Para confirmar a solicitação de material, digite o
+                        código de validação que foi enviado para o seu endereço
+                        de e-mail.
+                      </h3>
                     ) : requestStatusAuthorized === false ? (
                       <h3>{requestValidationErrorMessage}</h3>
                     ) : (
-                      <h3>Aguarde até que a a gestão escolar avalie a disponibilidade do material e providencie a logística da entrega.</h3>
+                      <h3>
+                        Aguarde até que a a gestão escolar avalie a
+                        disponibilidade do material e providencie a logística da
+                        entrega.
+                      </h3>
                     )
                   }
                 />
@@ -508,7 +550,12 @@ const OpenRequest = () => {
                 <Result
                   status="error"
                   title="O envio falhou"
-                  subTitle={<h3>Verifique se todos os campos foram preenchidos corretamente e tente novamente</h3>}
+                  subTitle={
+                    <h3>
+                      Verifique se todos os campos foram preenchidos
+                      corretamente e tente novamente
+                    </h3>
+                  }
                 />
               </Modal>
             )}
