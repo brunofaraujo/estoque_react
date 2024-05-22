@@ -54,8 +54,173 @@ const MenuList = ({ darkTheme }) => {
     "/dashboard/requests",
   ];
 
+  const items = [
+    {
+      key: "/dashboard",
+      label: <NavLink to={"/dashboard"}>Painel</NavLink>,
+      icon: <HomeOutlined />,
+    },
+    {
+      key: "/items",
+      label: "Inventário",
+      icon: <ReadOutlined />,
+      children: [
+        {
+          key: "/dashboard/items",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"items"}>Listar inventário</NavLink>,
+        },
+        {
+          key: "/dashboard/items/create",
+          icon: <PlusSquareOutlined />,
+          label: <NavLink to={"items/create"}>Novo item</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/users",
+      label: "Usuários",
+      icon: <SecurityScanOutlined />,
+      children: [
+        {
+          key: "/dashboard/users",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"users"}>Mostrar usuários</NavLink>,
+        },
+        {
+          key: "/dashboard/users/create",
+          icon: <UserAddOutlined />,
+          label: <NavLink to={"users/create"}>Novo usuário</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/volumes",
+      label: "Volumes",
+      icon: <GoldOutlined />,
+      children: [
+        {
+          key: "/dashboard/volumes",
+          icon: <ProfileOutlined />,
+          label: <NavLink to={"volumes"}>Mostrar volumes</NavLink>,
+        },
+        {
+          key: "/dashboard/volumes/create",
+          icon: <PlusSquareOutlined />,
+          label: <NavLink to={"volumes/create"}>Novo volume</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/employees",
+      label: "Colaboradores",
+      icon: <TeamOutlined />,
+      children: [
+        {
+          key: "/dashboard/employees",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"employees"}>Listar colaboradores</NavLink>,
+        },
+        {
+          key: "/dashboard/employees/create",
+          icon: <UserAddOutlined />,
+          label: <NavLink to={"employees/create"}>Novo colaborador</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/categories",
+      label: "Categorias",
+      icon: <AppstoreAddOutlined />,
+      children: [
+        {
+          key: "/dashboard/categories",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"categories"}>Listar categorias</NavLink>,
+        },
+        {
+          key: "/dashboard/categories/create",
+          icon: <PlusSquareOutlined />,
+          label: <NavLink to={"categories/create"}>Nova categoria</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/brands",
+      label: "Marcas",
+      icon: <BarcodeOutlined />,
+      children: [
+        {
+          key: "/dashboard/brands",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"brands"}>Listar marcas</NavLink>,
+        },
+        {
+          key: "/dashboard/brands/create",
+          icon: <PlusSquareOutlined />,
+          label: <NavLink to={"brands/create"}>Nova marca</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/moves",
+      label: "Movimentações",
+      icon: <BranchesOutlined />,
+      children: [
+        {
+          key: "/dashboard/moves/create",
+          icon: <LoginOutlined />,
+          label: <NavLink to={"moves/create"}>Nova movimentação</NavLink>,
+        },
+        {
+          key: "/dashboard/moves",
+          icon: <MergeOutlined />,
+          label: <NavLink to={"moves"}>Histórico</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/reports",
+      label: "Relatórios",
+      icon: <SnippetsOutlined />,
+      children: [
+        {
+          key: "/dashboard/reports/category",
+          icon: <FileTextOutlined />,
+          label: <NavLink to={"reports/category"}>Por categoria</NavLink>,
+        },
+        {
+          key: "/dashboard/reports/employee",
+          icon: <FileTextOutlined />,
+          label: <NavLink to={"reports/employee"}>Por colaborador</NavLink>,
+        },
+        {
+          key: "/dashboard/reports/item",
+          icon: <FileTextOutlined />,
+          label: <NavLink to={"reports/item"}>Por item</NavLink>,
+        },
+      ],
+    },
+    {
+      key: "/requests",
+      label: "Solicitações",
+      icon: <BarcodeOutlined />,
+      children: [
+        {
+          key: "/dashboard/requests",
+          icon: <OrderedListOutlined />,
+          label: <NavLink to={"requests"}>Mostrar solicitações</NavLink>,
+        },
+      ],
+    },
+  ];
+
   const location = useLocation();
-  const [openKeys, setOpenKeys] = useState(location.pathname.includes("/reports/") ? ["/reports"] : [location.pathname.split("/dashboard")[1]]);
+  const [openKeys, setOpenKeys] = useState(
+    location.pathname.includes("/reports/")
+      ? ["/reports"]
+      : [location.pathname.split("/dashboard")[1]]
+  );
   const onOpenChange = (keys) => {
     const lastOpenKey = keys.find((key) => openKeys.indexOf(key) === -1);
     if (lastOpenKey && menuKeys.indexOf(lastOpenKey) === -1) {
@@ -67,13 +232,13 @@ const MenuList = ({ darkTheme }) => {
 
   useEffect(() => {
     if (location.pathname.includes("create")) {
-      const openKeyName = `/${location.pathname.split("/")[2]}`
-      setOpenKeys([openKeyName])
+      const openKeyName = `/${location.pathname.split("/")[2]}`;
+      setOpenKeys([openKeyName]);
     }
     if (location.pathname === "/dashboard") {
-      setOpenKeys([])
+      setOpenKeys([]);
     }
-  },[location.pathname])
+  }, [location.pathname]);
 
   return (
     <Menu
@@ -84,126 +249,8 @@ const MenuList = ({ darkTheme }) => {
       onOpenChange={onOpenChange}
       defaultOpenKeys={[location.pathname]}
       defaultSelectedKeys={[location.pathname]}
-    >
-      <Menu.Item key="/dashboard" icon={<HomeOutlined />}>
-        <NavLink to={"/dashboard"}>Painel</NavLink>
-      </Menu.Item>
-
-      <Menu.SubMenu key="/items" title="Inventário" icon={<ReadOutlined />}>
-        <Menu.Item key="/dashboard/items" icon={<OrderedListOutlined />}>
-          <NavLink to={"items"}>Listar</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/items/create" icon={<PlusSquareOutlined />}>
-          <NavLink to={"items/create"}>Novo item</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-      <Menu.SubMenu
-        key="/users"
-        title="Usuários"
-        icon={<SecurityScanOutlined />}
-      >
-        <Menu.Item key="/dashboard/users" icon={<OrderedListOutlined />}>
-          <NavLink to={"users"}>Mostrar todos</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/users/create" icon={<UserAddOutlined />}>
-          <NavLink to={"users/create"}>Novo</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu key="/volumes" title="Volumes" icon={<GoldOutlined />}>
-        <Menu.Item key="/dashboard/volumes" icon={<ProfileOutlined />}>
-          <NavLink to={"volumes"}>Tipos</NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/dashboard/volumes/create"
-          icon={<PlusSquareOutlined />}
-        >
-          <NavLink to={"volumes/create"}>Novo</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu
-        key="/employees"
-        title="Colaboradores"
-        icon={<TeamOutlined />}
-      >
-        <Menu.Item key="/dashboard/employees" icon={<OrderedListOutlined />}>
-          <NavLink to={"employees"}>Mostrar todos</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/employees/create" icon={<UserAddOutlined />}>
-          <NavLink to={"employees/create"}>Cadastrar</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu
-        key="/categories"
-        title="Categorias"
-        icon={<AppstoreAddOutlined />}
-      >
-        <Menu.Item key="/dashboard/categories" icon={<OrderedListOutlined />}>
-          <NavLink to={"categories"}>Listar</NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/dashboard/categories/create"
-          icon={<PlusSquareOutlined />}
-        >
-          <NavLink to={"categories/create"}>Novo</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu key="/brands" title="Marcas" icon={<BarcodeOutlined />}>
-        <Menu.Item key="/dashboard/brands" icon={<OrderedListOutlined />}>
-          <NavLink to={"brands"}>Listar</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/brands/create" icon={<PlusSquareOutlined />}>
-          <NavLink to={"brands/create"}>Novo</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu
-        key="/moves"
-        title="Movimentações"
-        icon={<BranchesOutlined />}
-      >
-        <Menu.Item key="/dashboard/moves/create" icon={<LoginOutlined />}>
-          <NavLink to={"moves/create"}>Nova movimentação</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/moves" icon={<MergeOutlined />}>
-          <NavLink to={"moves"}>Histórico</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-      <Menu.SubMenu
-        key="/reports"
-        title="Relatórios"
-        icon={<SnippetsOutlined />}
-      >
-        <Menu.Item
-          key="/dashboard/reports/category"
-          icon={<FileTextOutlined />}
-        >
-          <NavLink to={"reports/category"}>Por categoria</NavLink>
-        </Menu.Item>
-        <Menu.Item
-          key="/dashboard/reports/employee"
-          icon={<FileTextOutlined />}
-        >
-          <NavLink to={"reports/employee"}>Por colaborador</NavLink>
-        </Menu.Item>
-        <Menu.Item key="/dashboard/reports/item" icon={<FileTextOutlined />}>
-          <NavLink to={"reports/item"}>Por item</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-
-      <Menu.SubMenu
-        key="/requests"
-        title="Solicitações"
-        icon={<BarcodeOutlined />}
-      >
-        <Menu.Item key="/dashboard/requests" icon={<OrderedListOutlined />}>
-          <NavLink to={"requests"}>Listar</NavLink>
-        </Menu.Item>
-      </Menu.SubMenu>
-    </Menu>
+      items={items}
+    />
   );
 };
 

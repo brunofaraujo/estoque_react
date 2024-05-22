@@ -184,11 +184,12 @@ const Items = () => {
       title: "Item",
       dataIndex: "title",
       key: "title",
-      width: "25%",
+      // width: "25%",
       ...getColumnSearchProps("title"),
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (title, i) => <NavLink to={`/dashboard/reports/item/${i.id}`}>{title}</NavLink>,
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Marca",
@@ -196,6 +197,7 @@ const Items = () => {
       key: "brand",
       sorter: (a, b) => a.brand.name.localeCompare(b.brand.name),
       sortDirections: ["ascend", "descend", "ascend"],
+      responsive: ['md', 'lg'],
     },
     {
       title: "Volume",
@@ -203,6 +205,7 @@ const Items = () => {
       key: "volume",
       sorter: (a, b) => a.volume.name.localeCompare(b.volume.name),
       sortDirections: ["ascend", "descend", "ascend"],
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Categoria",
@@ -210,13 +213,15 @@ const Items = () => {
       key: "category",
       sorter: (a, b) => a.category.name.localeCompare(b.category.name),
       sortDirections: ["ascend", "descend", "ascend"],
+      responsive: ['md', 'lg'],
     },
     {
-      title: "Quantidade",
+      title: "Qtd.",
       dataIndex: ["supply", "current"],
       key: "supply",
       sorter: (a, b) => a.supply.current - b.supply.current,
       sortDirections: ["ascend", "descend", "ascend"],
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
     {
       title: "Última atualização",
@@ -226,6 +231,7 @@ const Items = () => {
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
       defaultSortOrder: "descend",
+      responsive: ['md', 'lg'],
     },
     {
       title: "Ações",
@@ -264,7 +270,7 @@ const Items = () => {
           </Radio.Button>
         </Radio.Group>
       ),
-      width: "10%",
+      responsive: ['xs', 'sm', 'md', 'lg'],
     },
   ];
 
@@ -343,7 +349,8 @@ const Items = () => {
           <Table
             title={() => <Divider orientation="left">Inventário</Divider>}
             locale={ptBR}
-            style={{ minWidth: "85vw" }}
+            scroll={{ x: 'max-content' }}
+            tableLayout='auto'
             columns={columns}
             expandable={{
               expandedRowRender: (record) => showExpandedRow(record),

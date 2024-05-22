@@ -33,10 +33,6 @@ const Home = () => {
   const getActiveColors = (colors) =>
     colors.map((color) => new TinyColor(color).darken(5).toString());
 
-  const particlesLoaded = (container) => {
-    console.log(container);
-  };
-
   const setCloseModal = () => {
     setOpenModal(false);
   };
@@ -69,7 +65,6 @@ const Home = () => {
               <Col xs={23} sm={18} md={15} lg={15} xl={9}>
                 <Particles
                   options={options}
-                  particlesLoaded={particlesLoaded}
                   id="linkTriangles"
                   className={styles.particles}
                 />
