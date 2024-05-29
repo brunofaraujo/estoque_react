@@ -37,6 +37,7 @@ import LoadingSpinner from "./components/LoadingSpinner/LoadingSpinner.jsx";
 import Reports from "./pages/Reports/Reports.jsx";
 import Requests from "./pages/Requests/Requests.jsx";
 import OpenRequest from "./pages/OpenRequest/OpenRequest.jsx";
+import { ThemeProvider } from "./context/ThemeContext.jsx";
 
 axios.defaults.headers.common["Authorization"] = `Bearer ${localStorage.getItem(
   "accessToken"
@@ -196,7 +197,9 @@ const router = createBrowserRouter(
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <UserProvider>
-      <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+      <ThemeProvider>
+        <RouterProvider router={router} fallbackElement={<LoadingSpinner />} />
+      </ThemeProvider>
     </UserProvider>
   </React.StrictMode>
 );

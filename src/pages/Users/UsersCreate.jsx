@@ -1,6 +1,18 @@
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { Card, Space, Form, Input, Button, message } from "antd";
+import {
+  Card,
+  Space,
+  Form,
+  Input,
+  Button,
+  message,
+  Divider,
+  Layout,
+  Flex,
+  Row,
+  Col,
+} from "antd";
 import { FileProtectOutlined } from "@ant-design/icons";
 import { useContext, useEffect, useState } from "react";
 import ErrorComponent from "../../components/Error/ErrorComponent";
@@ -80,115 +92,138 @@ const UsersCreate = () => {
       {error && <ErrorComponent />}
       {loading && <LoadingSpinner />}
       {!error && !loading && user && (
-        <Space
-          direction={"vertical"}
-          size={"large"}
-          style={{ minWidth: "30%" }}
+        <Card
+          bordered
+          style={{ width: "max-content", minWidth: "100%", overflow: "auto" }}
         >
-          <Card
-            title="Cadastro de novo usuário do sistema"
-            size={"large"}
-            direction={"vertical"}
-          >
-            <Form
-              name={"user"}
-              form={form}
-              onFinish={(e) => handleSubmit(e)}
-              disabled={submitting}
-            >
-              <Form.Item
-                label={"Número da chapa"}
-                name={"username"}
-                normalize={(text) => useTrim(text)}
-                rules={[
-                  { required: true, message: "Digite o número da chapa" },
-                ]}
-                required
+          <Divider orientation="left">Cadastro de novo usuário</Divider>
+          <Layout style={{ backgroundColor: "#fff" }}>
+            <Flex vertical>
+              <Form
+                name={"user"}
+                form={form}
+                onFinish={(e) => handleSubmit(e)}
+                disabled={submitting}
               >
-                <Input placeholder={"Ex: 01234"} />
-              </Form.Item>
-              <Form.Item
-                label={"Nome"}
-                name={"name"}
-                normalize={(text) => useTrim(text)}
-                rules={[{ required: true, message: "Digite o nome" }]}
-                required
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label={"E-mail"}
-                name={"email"}
-                rules={[
-                  {
-                    required: true,
-                    type: "email",
-                    message: "Digite um e-mail válido",
-                  },
-                ]}
-                required
-              >
-                <Input />
-              </Form.Item>
-              <Form.Item
-                label={"Senha"}
-                type={"password"}
-                name={"password"}
-                rules={[
-                  { required: true, message: "Digite uma senha" },
-                  {
-                    min: 6,
-                    message: "A senha deve ter pelo menos 6 caracteres",
-                  },
-                  {
-                    whitespace: true,
-                    message: "Caractere inválido digitado",
-                  },
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item
-                label={"Confirme a senha"}
-                type={"password"}
-                name={"password2"}
-                dependencies={["password"]}
-                rules={[
-                  {
-                    required: true,
-                    message: "Repita a senha digitada",
-                  },
-                  {
-                    whitespace: true,
-                    message: "Caractere inválido digitado",
-                  },
-                  ({ getFieldValue }) => ({
-                    validator(_, value) {
-                      if (!value || getFieldValue("password") === value) {
-                        return Promise.resolve();
-                      }
-                      return Promise.reject(
-                        new Error("As senhas devem ser iguais")
-                      );
-                    },
-                  }),
-                ]}
-              >
-                <Input.Password />
-              </Form.Item>
-              <Form.Item>
-                <Button
-                  type={"primary"}
-                  htmlType="submit"
-                  icon={<FileProtectOutlined />}
-                  disabled={submitting}
-                >
-                  Salvar
-                </Button>
-              </Form.Item>
-            </Form>
-          </Card>
-        </Space>
+                <Row gutter={20}>
+                  <Col xs={12} sm={12} md={14} lg={8} xl={6}>
+                    <Form.Item
+                      label={"Número da chapa"}
+                      name={"username"}
+                      normalize={(text) => useTrim(text)}
+                      rules={[
+                        { required: true, message: "Digite o número da chapa" },
+                      ]}
+                      required
+                    >
+                      <Input placeholder={"Ex: 01234"} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={20}>
+                  <Col xs={24} sm={20} md={14} lg={8} xl={10}>
+                    <Form.Item
+                      label={"Nome"}
+                      name={"name"}
+                      normalize={(text) => useTrim(text)}
+                      rules={[{ required: true, message: "Digite o nome" }]}
+                      required
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={20}>
+                  <Col xs={24} sm={20} md={14} lg={8} xl={10}>
+                    <Form.Item
+                      label={"E-mail"}
+                      name={"email"}
+                      rules={[
+                        {
+                          required: true,
+                          type: "email",
+                          message: "Digite um e-mail válido",
+                        },
+                      ]}
+                      required
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={20}>
+                  <Col xs={24} sm={20} md={14} lg={8} xl={10}>
+                    <Form.Item
+                      label={"Senha"}
+                      type={"password"}
+                      name={"password"}
+                      rules={[
+                        { required: true, message: "Digite uma senha" },
+                        {
+                          min: 6,
+                          message: "A senha deve ter pelo menos 6 caracteres",
+                        },
+                        {
+                          whitespace: true,
+                          message: "Caractere inválido digitado",
+                        },
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={20}>
+                  <Col xs={24} sm={20} md={14} lg={8} xl={10}>
+                    <Form.Item
+                      label={"Confirme a senha"}
+                      type={"password"}
+                      name={"password2"}
+                      dependencies={["password"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Repita a senha digitada",
+                        },
+                        {
+                          whitespace: true,
+                          message: "Caractere inválido digitado",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (!value || getFieldValue("password") === value) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              new Error("As senhas devem ser iguais")
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row justify="start">
+                  <Col>
+                    <Form.Item>
+                      <Button
+                        type={"primary"}
+                        htmlType="submit"
+                        icon={<FileProtectOutlined />}
+                        disabled={submitting}
+                        style={{ width: "300px", fontWeight: "600" }}
+                      >
+                        Salvar
+                      </Button>
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Flex>
+          </Layout>
+        </Card>
       )}
     </>
   );

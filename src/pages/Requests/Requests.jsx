@@ -11,7 +11,6 @@ import {
   Table,
   Tag,
   Modal,
-  Button,
 } from "antd";
 import dayjs from "dayjs";
 import { UserContext } from "../../context/UserContext";
@@ -108,7 +107,6 @@ const Requests = () => {
             </Tag>
           );
       },
-      // width: "15%",
     },
     {
       title: "Data solicitação",
@@ -117,7 +115,6 @@ const Requests = () => {
       sorter: (a, b) => a.createdAt.localeCompare(b.createdAt),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
-      // width: "12%",
     },
     {
       title: "Última atualização",
@@ -128,7 +125,6 @@ const Requests = () => {
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
       defaultSortOrder: "descend",
       responsive: ["md"],
-      // width: "12%",
     },
     {
       title: "Operador",
@@ -165,7 +161,6 @@ const Requests = () => {
           ]}
         ></Select>
       ),
-      // width: "10%",
     },
   ];
 
@@ -186,7 +181,7 @@ const Requests = () => {
         key: "amount",
       },
     ];
-    return <Table columns={cls} dataSource={parsedList} pagination={false} />;
+    return <Table columns={cls} dataSource={parsedList} pagination={false} size="small" />;
   };
 
   const showExpandedRow = (record) => {

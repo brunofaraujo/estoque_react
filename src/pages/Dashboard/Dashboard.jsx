@@ -1,8 +1,7 @@
-import { Button, Layout, theme } from "antd";
+import { Button, Layout } from "antd";
 import Logo from "../../components/Logo/Logo";
 import MenuList from "../../components/Menu/MenuList";
-import { useContext, useEffect, useState } from "react";
-import ToggleThemeBtn from "../../components/Menu/ToggleThemeBtn";
+import { useContext, useState } from "react";
 import { MenuUnfoldOutlined, MenuFoldOutlined } from "@ant-design/icons";
 import { Content } from "antd/es/layout/layout";
 import FooterComponent from "../../components/Footer/FooterComponent";
@@ -10,40 +9,26 @@ import { Outlet } from "react-router-dom";
 import LoginMenu from "../../components/LoginMenu/LoginMenu";
 import useAuth from "../../hooks/useAuth";
 import { UserContext } from "../../context/UserContext";
+import { ThemeContext } from "../../context/ThemeContext";
 
 function Dashboard() {
   const { Header, Sider } = Layout;
-  const [darkTheme, setDarkTheme] = useState(false);
+  const { darkTheme } = useContext(ThemeContext);
   const [collapsed, setCollapsed] = useState(false);
   const { user } = useContext(UserContext);
   const { fetchUser } = useAuth();
 
-  const {
-    token: { colorBgContainer },
-  } = theme.useToken();
-
-  const toggleTheme = async () => {
-    setDarkTheme(!darkTheme);
-    localStorage.setItem("darkTheme", !darkTheme);
-  };
-
-  useEffect(() => {
-    localStorage.getItem("darkTheme") === "true"
-      ? setDarkTheme(true)
-      : setDarkTheme(false);
-  }, []);
-
   return (
     <>
       {fetchUser && user && (
-        <Layout style={{ minHeight: "20dvh" }}>
+        <Layout style={{ minHeight: "100dvh" }}>
           <Sider
             collapsible
             collapsed={collapsed}
             trigger={null}
             theme={darkTheme ? "dark" : "light"}
             width={250}
-            breakpoint="md"
+            breakpoint="lg"
             collapsedWidth={80}
             onBreakpoint={(broken) => {
               setCollapsed(broken);
@@ -51,14 +36,13 @@ function Dashboard() {
           >
             <Logo />
             <MenuList darkTheme={darkTheme} />
-            <ToggleThemeBtn darkTheme={darkTheme} toggleTheme={toggleTheme} />
           </Sider>
           <Layout>
             <Header
               style={{
                 padding: 0,
                 paddingTop: 10,
-                background: colorBgContainer,
+                background: darkTheme ? "#001529" : "#ffffff",
                 display: "flex",
                 justifyContent: "space-between",
               }}
@@ -67,6 +51,7 @@ function Dashboard() {
                 type="text"
                 onClick={() => setCollapsed(!collapsed)}
                 icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
+                style={{color: darkTheme ? "#a6adb4" : "#1f1f1f"}}
               ></Button>
               <span style={{ marginRight: 30 }}>
                 {user && <LoginMenu user={user} />}

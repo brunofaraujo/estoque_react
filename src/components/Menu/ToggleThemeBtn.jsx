@@ -1,12 +1,46 @@
 import { Button } from "antd";
-import styles from "./ToggleThemeBtn.module.css";
 import { HiOutlineSun, HiOutlineMoon } from "react-icons/hi";
 
 const ToggleThemeBtn = ({ darkTheme, toggleTheme }) => {
   return (
-    <div className={styles.toggle_theme}>
-      <Button onClick={toggleTheme} className={styles.toggle_theme_btn}>
-        {darkTheme ? <HiOutlineSun size={18} /> : <HiOutlineMoon size={18} />}
+    <div>
+      <Button
+        onClick={toggleTheme}
+        style={
+          !darkTheme
+            ? {
+                backgroundColor: "#001529",
+                color: "#a6adb4",
+                borderColor: "#a6adb4",
+                width: "100%"
+              }
+            : {width: "100%"}
+        }
+        size="small"
+      >
+        {darkTheme ? (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              verticalAlign: "bottom",
+            }}
+          >
+            <HiOutlineSun size={20} />
+            <span> Tema claro</span>
+          </div>
+        ) : (
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              verticalAlign: "bottom",
+            }}
+          >
+            <HiOutlineMoon size={20} />
+            <span> Tema escuro</span>
+          </div>
+        )}
       </Button>
     </div>
   );

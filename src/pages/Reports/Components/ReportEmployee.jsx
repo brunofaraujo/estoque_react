@@ -44,6 +44,7 @@ const ReportEmployee = () => {
   };
 
   const getEmployees = async () => {
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_URL}/employees?filterMoves=true`)
       .then((response) => {

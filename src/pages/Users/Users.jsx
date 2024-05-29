@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useEffect } from "react";
 import { useState } from "react";
-import styles from "./Users.module.css";
 import { Avatar, Card, Divider, List } from "antd";
 import ErrorComponent from "../../components/Error/ErrorComponent";
 import { NavLink } from "react-router-dom";
@@ -25,18 +24,19 @@ const Users = () => {
 
   const showUsers = () => {
     return (
-      <Card direction={"vertical"} className={styles.users_container}>
+      <Card
+        bordered
+        style={{ width: "max-content", minWidth: "100%", overflow: "auto"}}
+      >
         <Divider orientation="left">Usuários registrados</Divider>
         <br />
         <List
           itemLayout={"horizontal"}
           size={"small"}
-          style={{ display: "flex" }}
           bordered
           dataSource={users}
           renderItem={(user) => (
             <List.Item
-              style={{ width: 450, padding: 20, margin: 5 }}
               actions={[<NavLink to={`update/${user.id}`}>Editar</NavLink>]}
             >
               <List.Item.Meta
@@ -61,11 +61,11 @@ const Users = () => {
   }, []);
 
   return (
-    <div className={styles.users_container}>
+    <>
       {loading && <LoadingSpinner />}
       {error && <ErrorComponent />}
       {users && !error && showUsers()}
-    </div>
+    </>
   );
 };
 

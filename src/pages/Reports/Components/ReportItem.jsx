@@ -5,7 +5,6 @@ import {
   Descriptions,
   Flex,
   Form,
-  
   Select,
   Space,
   Table,
@@ -41,7 +40,6 @@ const ReportItem = () => {
   const fetchData = async () => {
     itemId ? await getItem(itemId) : setReportData(undefined);
     await getItems();
-    setLoading(false);
   };
 
   const getItem = async (itemId) => {
@@ -61,9 +59,11 @@ const ReportItem = () => {
           })
         );
         setItems(itemsObj);
+        setLoading(false);
       })
       .catch((err) => {
         setError(true);
+        setLoading(false);
       });
   };
 

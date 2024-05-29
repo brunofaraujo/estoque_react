@@ -33,13 +33,14 @@ const ReportCategory = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const searchInput = useRef(null);
-  const {user} = useContext(UserContext);
+  const { user } = useContext(UserContext);
 
   useEffect(() => {
     getData();
   }, []);
 
   const getCategories = async () => {
+    setLoading(true);
     axios
       .get(`${import.meta.env.VITE_API_URL}/categories`)
       .then((response) => {
@@ -195,15 +196,17 @@ const ReportCategory = () => {
         {
           title: "Qtd. mov.",
           dataIndex: ["supply", "history", 0, "amount"],
-          sorter: (a, b) => a.supply.history[0].amount - b.supply.history[0].amount,
-          width: "8%"
+          sorter: (a, b) =>
+            a.supply.history[0].amount - b.supply.history[0].amount,
+          width: "8%",
         },
         {
           title: "Data",
           dataIndex: ["supply", "updatedAt"],
           key: "updatedAt",
           width: "10%",
-          sorter: (a, b) => dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
+          sorter: (a, b) =>
+            dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
           sortDirections: ["ascend", "descend", "ascend"],
           render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
           defaultSortOrder: "descend",
@@ -213,15 +216,20 @@ const ReportCategory = () => {
           dataIndex: ["supply", "history", 0],
           key: "type",
           width: "8%",
-          sorter: (a, b) => a.supply.history[0]["type"].localeCompare(b.supply.history[0]["type"]),
+          sorter: (a, b) =>
+            a.supply.history[0]["type"].localeCompare(
+              b.supply.history[0]["type"]
+            ),
           sortDirections: ["ascend", "descend", "ascend"],
-          render: (data) =>
-            data && data.type === "I" ? "Entrada" : "Saída",
+          render: (data) => (data && data.type === "I" ? "Entrada" : "Saída"),
         },
         {
           title: "Operador",
           dataIndex: ["supply", "history", 0, "user"],
-          sorter: (a, b) =>  a.supply.history[0].user.name.localeCompare(b.supply.history[0].user.name),
+          sorter: (a, b) =>
+            a.supply.history[0].user.name.localeCompare(
+              b.supply.history[0].user.name
+            ),
           sortDirections: ["ascend", "descend", "ascend"],
           key: "user",
           render: (data) => data && data.name.split(" ")[0],

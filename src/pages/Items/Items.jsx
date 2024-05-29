@@ -4,6 +4,7 @@ import {
   Input,
   Popconfirm,
   Radio,
+  Select,
   Space,
   Table,
   message,
@@ -35,6 +36,20 @@ const Items = () => {
     confirm();
     setSearchText(selectedKeys[0]);
     setSearchedColumn(dataIndex);
+  };
+
+  const handSelectedAction = (id, value) => {
+    switch (value) {
+      case "M":
+        navigate(`../moves/create/${id}`);
+        break;
+      case "E":
+        navigate(`update/${id}`);
+        break;
+      case "X":
+        showConfirmDialog(id);
+        break;
+    }
   };
 
   const handleReset = (clearFilters) => {
@@ -188,8 +203,10 @@ const Items = () => {
       ...getColumnSearchProps("title"),
       sorter: (a, b) => a.title.localeCompare(b.title),
       sortDirections: ["ascend", "descend", "ascend"],
-      render: (title, i) => <NavLink to={`/dashboard/reports/item/${i.id}`}>{title}</NavLink>,
-      responsive: ['xs', 'sm', 'md', 'lg'],
+      render: (title, i) => (
+        <NavLink to={`/dashboard/reports/item/${i.id}`}>{title}</NavLink>
+      ),
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Marca",
@@ -197,7 +214,7 @@ const Items = () => {
       key: "brand",
       sorter: (a, b) => a.brand.name.localeCompare(b.brand.name),
       sortDirections: ["ascend", "descend", "ascend"],
-      responsive: ['md', 'lg'],
+      responsive: ["md", "lg"],
     },
     {
       title: "Volume",
@@ -205,7 +222,7 @@ const Items = () => {
       key: "volume",
       sorter: (a, b) => a.volume.name.localeCompare(b.volume.name),
       sortDirections: ["ascend", "descend", "ascend"],
-      responsive: ['xs', 'sm', 'md', 'lg'],
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Categoria",
@@ -213,7 +230,7 @@ const Items = () => {
       key: "category",
       sorter: (a, b) => a.category.name.localeCompare(b.category.name),
       sortDirections: ["ascend", "descend", "ascend"],
-      responsive: ['md', 'lg'],
+      responsive: ["md", "lg"],
     },
     {
       title: "Qtd.",
@@ -221,56 +238,51 @@ const Items = () => {
       key: "supply",
       sorter: (a, b) => a.supply.current - b.supply.current,
       sortDirections: ["ascend", "descend", "ascend"],
-      responsive: ['xs', 'sm', 'md', 'lg'],
+      responsive: ["xs", "sm", "md", "lg"],
     },
     {
       title: "Última atualização",
       dataIndex: ["supply", "updatedAt"],
       key: "updatedAt",
-      sorter: (a, b) => dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
+      sorter: (a, b) =>
+        dayjs(a.supply.updatedAt).unix() - dayjs(b.supply.updatedAt).unix(),
       sortDirections: ["ascend", "descend", "ascend"],
       render: (date) => dayjs(date).format("DD/MM/YYYY HH:mm"),
       defaultSortOrder: "descend",
-      responsive: ['md', 'lg'],
+      responsive: ["md", "lg"],
     },
     {
       title: "Ações",
       dataIndex: "id",
       key: "id",
       render: (id) => (
-        <Radio.Group
-          buttonStyle={"outline"}
-          style={{ whiteSpace: "nowrap" }}
-          size={"small"}
-        >
-          <Radio.Button
-            disabled={disabled}
-            onClick={() => navigate(`../moves/create/${id}`)}
-            style={{ color: "#1d39c4", fontWeight: 500 }}
-          >
-            Movimentar
-          </Radio.Button>
-          <Radio.Button
-            disabled={disabled}
-            onClick={() => navigate(`update/${id}`)}
-            style={{ color: "#08979c", fontWeight: 500 }}
-          >
-            Editar
-          </Radio.Button>
-          <Radio.Button
-            disabled={
-              disabled ||
-              data.filter((item) => item.id === id && item.supply.current > 0)
-                .length
-            }
-            onClick={() => showConfirmDialog(id)}
-            style={{ color: "#f5222d", fontWeight: 600 }}
-          >
-            Excluir
-          </Radio.Button>
-        </Radio.Group>
+        <Select
+          defaultValue={"Mostrar..."}
+          onSelect={(value) => handSelectedAction(id, value)}
+          style={{ width: 110 }}
+          options={[
+            {
+              value: "M",
+              label: "Movimentar",
+              disabled: disabled,
+            },
+            {
+              value: "E",
+              label: "Editar",
+              disabled: disabled,
+            },
+            {
+              value: "X",
+              label: "Excluir",
+              disabled:
+                disabled ||
+                data.filter((item) => item.id === id && item.supply.current > 0)
+                  .length,
+            },
+          ]}
+        />
       ),
-      responsive: ['xs', 'sm', 'md', 'lg'],
+      responsive: ["xs", "sm", "md", "lg"],
     },
   ];
 
@@ -313,6 +325,7 @@ const Items = () => {
         columns={expdColumns}
         dataSource={Array(record)}
         pagination={false}
+        size="small"
       />
     );
   };
@@ -330,7 +343,9 @@ const Items = () => {
           title="Atenção"
           description={
             <>
-              <p style={{fontWeight: "bold"}}>Tem certeza que deseja excluir o item?</p>
+              <p style={{ fontWeight: "bold" }}>
+                Tem certeza que deseja excluir o item?
+              </p>
               <p>Essa operação não poderá ser revertida</p>
             </>
           }
@@ -349,8 +364,8 @@ const Items = () => {
           <Table
             title={() => <Divider orientation="left">Inventário</Divider>}
             locale={ptBR}
-            scroll={{ x: 'max-content' }}
-            tableLayout='auto'
+            scroll={{ x: "max-content" }}
+            tableLayout="auto"
             columns={columns}
             expandable={{
               expandedRowRender: (record) => showExpandedRow(record),

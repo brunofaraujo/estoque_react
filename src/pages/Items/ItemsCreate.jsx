@@ -1,13 +1,16 @@
 import {
   Button,
   Card,
+  Col,
   DatePicker,
   Divider,
+  Flex,
   Form,
   Input,
   InputNumber,
+  Layout,
+  Row,
   Select,
-  Space,
   message,
 } from "antd";
 import axios from "axios";
@@ -174,181 +177,200 @@ const ItemsCreate = () => {
       {error && <ErrorComponent />}
       {loading && <LoadingSpinner />}
       {brands && categories && volumes && !error && !loading && (
-        <Card bordered={true} style={{ width: "80dvw" }}>
+        <Card
+          bordered
+          style={{ width: "max-content", minWidth: "100%", overflow: "auto" }}
+        >
           <Divider orientation="left">Cadastro de novo item</Divider>
           <br />
-          <Space direction={"vertical"}>
-            <Form
-              variant={"filled"}
-              form={form}
-              style={{ display: "flex", flexDirection: "column", gap: "20px" }}
-              name={"item"}
-              onFinish={(e) => handleItemSubmit(e)}
-              disabled={submitting}
-            >
-              <Space size="middle" wrap>
-                <Form.Item
-                  labelAlign="left"
-                  label={"Nome"}
-                  name={"title"}
-                  normalize={(text) => useTrim(text)}
-                  rules={[
-                    { required: true, message: "Digite o nome do item" },
-                    { type: "string" },
-                    { whitespace: true, message: "Nome inválido" },
-                    { max: 100, message: "Limite de texto excedido" },
-                  ]}
-                  style={{ paddingRight: "40px" }}
-                >
-                  <Input
-                    placeholder="Nome do item"
-                    style={{ width: "750px" }}
-                    count={{
-                      show: true,
-                      max: 100,
-                    }}
-                  />
-                </Form.Item>
-                <Form.Item
-                  labelAlign="left"
-                  label={"Marca"}
-                  name={"brandId"}
-                  rules={[{ required: true, message: "Selecione a marca" }]}
-                >
-                  <Select
-                    showSearch
-                    optionFilterProp="children"
-                    onSearch={handleBrandSearch}
-                    onChange={handleBrandChange}
-                    filterOption={filterOption}
-                    style={{
-                      width: "250px",
-                    }}
-                    options={brands}
-                  />
-                </Form.Item>
-              </Space>
-              <Space size="middle" wrap>
-                <Form.Item
-                  labelAlign="left"
-                  label={"Categoria"}
-                  name={"categoryId"}
-                  rules={[{ required: true, message: "Selecione a categoria" }]}
-                  style={{ paddingRight: "60px" }}
-                >
-                  <Select style={{ width: "150px" }} options={categories} />
-                </Form.Item>
-                <Form.Item
-                  labelAlign="left"
-                  label={"Volume"}
-                  name={"volumeId"}
-                  rules={[{ required: true, message: "Selecione o volume" }]}
-                >
-                  <Select style={{ width: "150px" }} options={volumes} />
-                </Form.Item>
-              </Space>
-              <Space size="middle">
-                <Form.Item
-                  label="Descrição"
-                  name={"description"}
-                  labelAlign="left"
-                  normalize={(text) => useTrim(text)}
-                  rules={[
-                    { type: "string" },
-                    { max: 255, message: "Limite de texto excedido" },
-                    {
-                      whitespace: true,
-                      message: "Remova os espaços em branco",
-                    },
-                  ]}
-                >
-                  <TextArea
-                    rows={4}
-                    maxLength={255}
-                    style={{ width: "720px" }}
-                    count={{
-                      show: true,
-                      max: 255,
-                    }}
-                  />
-                </Form.Item>
-              </Space>
-              <Space wrap size="middle">
-                <Form.Item
-                  labelAlign="left"
-                  label={"Patrimônio"}
-                  name={"register"}
-                  normalize={(text) => useTrim(text)}
-                  style={{ paddingRight: "40px" }}
-                >
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
+          <Layout style={{ backgroundColor: "#fff" }}>
+            <Flex vertical>
+              <Form
+                variant={"filled"}
+                form={form}
+                name={"item"}
+                onFinish={(e) => handleItemSubmit(e)}
+                disabled={submitting}
+              >
+                <Row gutter={24}>
+                  <Col xs={24} sm={24} md={20} lg={12}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Nome"}
+                      name={"title"}
+                      normalize={(text) => useTrim(text)}
+                      rules={[
+                        { required: true, message: "Digite o nome do item" },
+                        { type: "string" },
+                        { whitespace: true, message: "Nome inválido" },
+                        { max: 100, message: "Limite de texto excedido" },
+                      ]}
+                    >
+                      <Input
+                        placeholder="Nome do item"
+                        count={{
+                          show: true,
+                          max: 100,
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={24} sm={20} md={14} lg={10} xl={8}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Marca"}
+                      name={"brandId"}
+                      rules={[{ required: true, message: "Selecione a marca" }]}
+                    >
+                      <Select
+                        showSearch
+                        optionFilterProp="children"
+                        onSearch={handleBrandSearch}
+                        onChange={handleBrandChange}
+                        filterOption={filterOption}
+                        options={brands}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col xs={12} sm={12} md={12} lg={8} xl={6}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Categoria"}
+                      name={"categoryId"}
+                      rules={[
+                        { required: true, message: "Selecione a categoria" },
+                      ]}
+                    >
+                      <Select options={categories} />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={12} sm={12} md={12} lg={8} xl={6}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Volume"}
+                      name={"volumeId"}
+                      rules={[
+                        { required: true, message: "Selecione o volume" },
+                      ]}
+                    >
+                      <Select options={volumes} />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                <Col xs={24} sm={24} md={20} lg={17} xl={18}>
+                    <Form.Item
+                      label="Descrição"
+                      name={"description"}
+                      labelAlign="left"
+                      normalize={(text) => useTrim(text)}
+                      rules={[
+                        { type: "string" },
+                        { max: 255, message: "Limite de texto excedido" },
+                        {
+                          whitespace: true,
+                          message: "Remova os espaços em branco",
+                        },
+                      ]}
+                    >
+                      <TextArea
+                        rows={4}
+                        maxLength={255}
+                        count={{
+                          show: true,
+                          max: 255,
+                        }}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col xs={12} sm={12} md={12} lg={8} xl={6}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Patrimônio"}
+                      name={"register"}
+                      normalize={(text) => useTrim(text)}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={12} sm={12} md={12} lg={8} xl={6}>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Validade"}
+                      name={"expiration"}
+                    >
+                      <DatePicker
+                        minDate={dayjs()}
+                        format={dateFormat}
+                        placeholder={"DD/MM/YYYY"}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row gutter={24}>
+                  <Col>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"N° Série"}
+                      normalize={(text) => useTrim(text)}
+                      name={"serial"}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                  <Col>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Lote"}
+                      name={"batch"}
+                      normalize={(text) => useTrim(text)}
+                    >
+                      <Input />
+                    </Form.Item>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                    <Form.Item
+                      labelAlign="left"
+                      label={"Quantidade inicial"}
+                      name={"amount"}
+                      rules={[
+                        { required: true, message: "Especifique a quantidade" },
+                        {
+                          pattern: new RegExp(/^[1-9]\d*$/g),
+                          message:
+                            "Digite um número válido (inteiro e positivo)",
+                        },
+                      ]}
+                    >
+                      <InputNumber min={1} />
+                    </Form.Item>
+                  </Col>
+                </Row>
 
-                <Form.Item
-                  labelAlign="left"
-                  label={"Validade"}
-                  name={"expiration"}
-                  style={{ paddingRight: "40px" }}
-                >
-                  <DatePicker
-                    minDate={dayjs()}
-                    format={dateFormat}
-                    placeholder={"DD/MM/YYYY"}
-                  />
-                </Form.Item>
-                <Form.Item
-                  labelAlign="left"
-                  label={"N° Série"}
-                  normalize={(text) => useTrim(text)}
-                  name={"serial"}
-                  style={{ paddingRight: "40px" }}
-                >
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
-
-                <Form.Item
-                  labelAlign="left"
-                  label={"Lote"}
-                  name={"batch"}
-                  normalize={(text) => useTrim(text)}
-                  style={{ paddingRight: "40px" }}
-                >
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
-              </Space>
-
-              <Space size="middle">
-                <Form.Item
-                  labelAlign="left"
-                  label={"Quantidade"}
-                  name={"amount"}
-                  style={{ paddingRight: "40px" }}
-                  rules={[
-                    { required: true, message: "Especifique a quantidade" },
-                    {
-                      pattern: new RegExp(/^[1-9]\d*$/g),
-                      message: "Digite um número válido (inteiro e positivo)",
-                    },
-                  ]}
-                >
-                  <InputNumber min={1} style={{ width: "150px" }} />
-                </Form.Item>
-              </Space>
-              <Space style={{ margin: "auto 0", alignSelf: "center" }}>
-                <Form.Item noStyle>
-                  <Button
-                    type={"primary"}
-                    htmlType="submit"
-                    disabled={submitting}
-                    icon={<FileProtectOutlined />}
-                    style={{ width: "150px", fontWeight: "600" }}
-                  >
-                    Salvar item
-                  </Button>
-                </Form.Item>
-              </Space>
-            </Form>
-          </Space>
+                <Row justify="start">
+                  <Col>
+                      <Form.Item>
+                        <Button
+                          type={"primary"}
+                          htmlType="submit"
+                          disabled={submitting}
+                          icon={<FileProtectOutlined />}
+                          style={{ width: "300px", fontWeight: "600" }}
+                        >
+                          Cadastrar item
+                        </Button>
+                      </Form.Item>
+                  </Col>
+                </Row>
+              </Form>
+            </Flex>
+          </Layout>
         </Card>
       )}
     </>
